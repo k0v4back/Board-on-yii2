@@ -40,6 +40,15 @@ class User extends ActiveRecord implements IdentityInterface
         return $user;
     }
 
+    public function confirmSignup()
+    {
+        if (!$this->isWait()) {
+            throw new \DomainException('Пользователь уже активирован.');
+        }
+        $this->status = self::STATUS_ACTIVE;
+        $this->email_confirm_token = null;
+    }
+
     public function isActive(): bool
     {
         return $this->status === self::STATUS_ACTIVE;

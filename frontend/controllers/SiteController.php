@@ -23,17 +23,20 @@ class SiteController extends Controller
 {
     private $passwordResetRequestService;
     private $contactService;
+    private $signupService;
 
     public function __construct(
         $id,
         $module,
         PasswordResetRequestService $passwordResetRequestService,
         ContactService $contactService,
+        SignupService $signupService,
         $config = []
     )
     {
-        $this->$passwordResetRequestService = $passwordResetRequestService;
+        $this->passwordResetRequestService = $passwordResetRequestService;
         $this->contactService = $contactService;
+        $this->signupService = $signupService;
         parent::__construct($id, $module, $config);
     }
 
@@ -172,18 +175,33 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $form = new SignupForm();
-        if ($form->load(Yii::$app->request->post())) {
-
-            $user = (new SignupService())->signup($form);
-
-            if (Yii::$app->getUser()->login($user)) {
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->signupService->signup($form);
+                Yii::$app->session->setFlash('success', 'Проверьте свой email.');
                 return $this->goHome();
+            } catch (\DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
             }
         }
-
         return $this->render('signup', [
             'model' => $form,
         ]);
+    }
+
+
+    public function actionConfirm($token)
+    {
+        try {
+            $this->signupService->confirm($token);
+            Yii::$app->session->setFlash('success', 'Ваш email успешно подтверждён.');
+            return $this->redirect(['login']);
+        } catch (\DomainException $e) {
+            Yii::$app->errorHandler->logException($e);
+            Yii::$app->session->setFlash('error', $e->getMessage());
+            return $this->goHome();
+        }
     }
 
     /**
