@@ -21,6 +21,14 @@ use frontend\forms\ContactForm;
  */
 class SiteController extends Controller
 {
+    private $passwordResetRequestService;
+
+    public function __construct($id, $module, PasswordResetRequestService $passwordResetRequestService, $config = [])
+    {
+        $this->$passwordResetRequestService = $passwordResetRequestService;
+        parent::__construct($id, $module, $config);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -178,7 +186,7 @@ class SiteController extends Controller
         $form = new PasswordResetRequestForm();
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
-                (new PasswordResetRequestService())->request($form);
+                $this->passwordResetRequestService->request($form);
                 Yii::$app->session->setFlash('success', 'Проверьте ваш email с дальнейшими инструкциями.');
                 return $this->goHome();
             } catch (\DomainException $e) {
@@ -201,10 +209,11 @@ class SiteController extends Controller
      */
     public function actionResetPassword($token)
     {
-        $service = new PasswordResetRequestService();
+//        $service = new PasswordResetRequestService();
+//        $service = Yii::$container->get(PasswordResetRequestService::class);
 
         try {
-            $service->validateToken($token);
+            $this->passwordResetRequestService->validateToken($token);
         } catch (\DomainException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
@@ -212,7 +221,7 @@ class SiteController extends Controller
         $form = new ResetPasswordForm();
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
-                (new PasswordResetRequestService())->reset($token, $form);
+                $this->passwordResetRequestService->reset($token, $form);
                 Yii::$app->session->setFlash('success', 'Новый пароль успешно сохранён.');
                 return $this->goHome();
             } catch (\DomainException $e) {
