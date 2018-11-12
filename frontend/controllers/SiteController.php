@@ -2,10 +2,10 @@
 
 namespace frontend\controllers;
 
+use frontend\services\contact\ContactService;
 use frontend\services\users\PasswordResetRequestService;
 use frontend\services\users\SignupService;
 use Yii;
-use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -22,10 +22,18 @@ use frontend\forms\ContactForm;
 class SiteController extends Controller
 {
     private $passwordResetRequestService;
+    private $contactService;
 
-    public function __construct($id, $module, PasswordResetRequestService $passwordResetRequestService, $config = [])
+    public function __construct(
+        $id,
+        $module,
+        PasswordResetRequestService $passwordResetRequestService,
+        ContactService $contactService,
+        $config = []
+    )
     {
         $this->$passwordResetRequestService = $passwordResetRequestService;
+        $this->contactService = $contactService;
         parent::__construct($id, $module, $config);
     }
 
@@ -128,20 +136,22 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
+        $form = new ContactForm();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->contactService->send($form);
+                Yii::$app->session->setFlash('success', 'Мы скоро вам ответим.');
+                return $this->goHome();
+            } catch (\Exception $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', 'Возникла ошибка при отпрвки письма.');
             }
-
             return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('contact', [
+            'model' => $form,
+        ]);
     }
 
     /**

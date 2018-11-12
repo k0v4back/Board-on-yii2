@@ -9,13 +9,6 @@ use Yii;
 
 class PasswordResetRequestService
 {
-    private $supportEmail;
-
-    public function __construct($supportEmail)
-    {
-        $this->supportEmail = $supportEmail;
-    }
-
     public function request(PasswordResetRequestForm $form)
     {
         $user = User::findOne([
@@ -33,13 +26,12 @@ class PasswordResetRequestService
             throw new \RuntimeException('Ошибка сохранения!');
         }
 
-        $sent = Yii::$app
+        $sent = $this
             ->mailer
             ->compose(
                 ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
                 ['user' => $user]
             )
-            ->setFrom($this->supportEmail)
             ->setTo($user->email)
             ->setSubject('Password reset for ' . Yii::$app->name)
             ->send();
