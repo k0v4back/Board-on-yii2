@@ -7,32 +7,30 @@ use frontend\forms\PasswordResetRequestForm;
 use frontend\forms\ResetPasswordForm;
 use Yii;
 use yii\mail\MailerInterface;
+use common\repositories\UserRepository;
 
 class PasswordResetRequestService
 {
     private $mailer;
+    private $user;
 
-    public function __construct(MailerInterface $mailer)
+    public function __construct(UserRepository $user, MailerInterface $mailer)
     {
+        $this->user = $user;
         $this->mailer = $mailer;
     }
 
     public function request(PasswordResetRequestForm $form)
     {
-        $user = User::findOne([
-            'status' => User::STATUS_ACTIVE,
-            'email' => $form->email,
-        ]);
+        $user = $this->user->getByEmail($form->email);
 
-        if (!$user) {
-            throw new \DomainException('Пользователь не найден!');
+        if (!$user->isActive()) {
+            throw new \DomainException('Пользователь не активен.');
         }
 
         $user->requestPasswordReset();
 
-        if (!$user->save()) {
-            throw new \RuntimeException('Ошибка сохранения!');
-        }
+        $this->user->save($user);
 
         $sent = $this
             ->mailer
@@ -41,11 +39,11 @@ class PasswordResetRequestService
                 ['user' => $user]
             )
             ->setTo($user->email)
-            ->setSubject('Password reset for ' . Yii::$app->name)
+            ->setSubject('Сброс пароля для пользователя ' . Yii::$app->name)
             ->send();
 
         if (!$sent) {
-            throw new \RuntimeException('Sending error.');
+            throw new \RuntimeException('Ошибка при отправки.');
         }
     }
 
@@ -70,8 +68,6 @@ class PasswordResetRequestService
 
         $user->resetPassword($form->password);
 
-        if (!$user->save()) {
-            throw new \RuntimeException('Saving error.');
-        }
+        $this->user->save($user);
     }
 }
