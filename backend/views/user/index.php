@@ -8,57 +8,67 @@ use kartik\date\DatePicker;
 /* @var $searchModel backend\search\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Users';
+$this->title = 'Пользователи';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать пользователя', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <div class="box box-info">
-        <div class="box-body">
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        <div class="box-body" style="overflow-y: hidden">
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'username',
-            'email:email',
-            [
-                'attribute' => 'created_at',
-                'filter' => DatePicker::widget([
-                    'model' => $searchModel,
-                    'attribute' => 'date_from',
-                    'attribute2' => 'date_to',
-                    'type' => DatePicker::TYPE_RANGE,
-                    'separator' => '-',
-                    'pluginOptions' => [
-                        'todayHighlight' => true,
-                        'autoclose'=>true,
-                        'format' => 'yyyy-mm-dd',
+                    [
+                        'attribute' => 'id',
+                        'label' => 'Идентификатор',
                     ],
-                ]),
-                'format' => 'datetime',
-            ],
-            [
-                'attribute' => 'status',
-                'filter' => \board\helpers\UserHelper::statusList(),
-                'value' => function(\board\entities\User $user){
-                    return \board\helpers\UserHelper::statusLabel($user->status);
-                },
-                'format' => 'raw',
-            ],
+                    [
+                        'attribute' => 'username',
+                        'label' => 'Имя',
+                    ],
+                    [
+                        'attribute' => 'email',
+                        'label' => 'Почта',
+                    ],
+                    [
+                        'attribute' => 'created_at',
+                        'label' => 'Дата регистрации',
+                        'filter' => DatePicker::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'date_from',
+                            'attribute2' => 'date_to',
+                            'type' => DatePicker::TYPE_RANGE,
+                            'separator' => '-',
+                            'pluginOptions' => [
+                                'todayHighlight' => true,
+                                'autoclose' => true,
+                                'format' => 'yyyy-mm-dd',
+                            ],
+                        ]),
+                        'format' => 'datetime',
+                    ],
+                    [
+                        'attribute' => 'status',
+                        'label' => 'Статус',
+                        'filter' => \board\helpers\UserHelper::statusList(),
+                        'value' => function (\board\entities\User $user) {
+                            return \board\helpers\UserHelper::statusLabel($user->status);
+                        },
+                        'format' => 'raw',
+                    ],
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                    ['class' => 'yii\grid\ActionColumn'],
+                ],
+            ]); ?>
         </div>
     </div>
 </div>

@@ -1,10 +1,7 @@
 <?php
 
+use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
-
-
-/* @var $this yii\web\View */
-/* @var $model board\entities\User */
 
 $this->title = 'Create User';
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
@@ -12,10 +9,16 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <?php $form = ActiveForm::begin(); ?>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <?= $form->field($model, 'username')->textInput(['maxLength' => true])->label('Имя') ?>
+    <?= $form->field($model, 'email')->textInput(['maxLength' => true])->label('Почта') ?>
+    <?= $form->field($model, 'password')->passwordInput(['maxLength' => true])->label('Пароль') ?>
+
+    <div class="form-group">
+        <?= Html::submitButton('Создать', ['class' => 'btn btn-primary']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
 </div>

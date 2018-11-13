@@ -12,14 +12,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы действительно хотите удалить пользователя?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -28,16 +26,29 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'username',
-            'auth_key',
-            'password_hash',
-            'password_reset_token',
-            'email:email',
-            'email_confirm_token:email',
-            'status',
-            'created_at',
-            'updated_at',
+            [
+                'attribute' => 'id',
+                'label' => 'Идентификатор',
+            ],
+            [
+                'attribute' => 'username',
+                'label' => 'Имя',
+            ],
+            [
+                'attribute' => 'email',
+                'label' => 'Почта',
+            ],
+            [
+                'attribute' => 'status',
+                'label' => 'Статус',
+                'filter' => \board\helpers\UserHelper::statusList(),
+                'value' => function (\board\entities\User $user) {
+                    return \board\helpers\UserHelper::statusLabel($user->status);
+                },
+                'format' => 'raw',
+            ],
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
 

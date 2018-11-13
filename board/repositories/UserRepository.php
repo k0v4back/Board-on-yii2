@@ -17,6 +17,11 @@ class UserRepository
         return $this->getBy(['email_confirm_token' => $token]);
     }
 
+    public function get($id): User
+    {
+        return $this->getBy(['id' => $id]);
+    }
+
     public function getByEmail($email): User
     {
         return $this->getBy(['email' => $email]);
