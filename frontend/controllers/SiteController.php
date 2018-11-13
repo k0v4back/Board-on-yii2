@@ -2,20 +2,20 @@
 
 namespace frontend\controllers;
 
-use frontend\services\contact\ContactService;
-use common\services\LoginService;
-use frontend\services\users\PasswordResetRequestService;
-use frontend\services\users\SignupService;
+use board\services\contact\ContactService;
+use board\services\users\LoginService;
+use board\services\users\PasswordResetRequestService;
+use board\services\users\SignupService;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\forms\LoginForm;
-use frontend\forms\PasswordResetRequestForm;
-use frontend\forms\ResetPasswordForm;
-use frontend\forms\SignupForm;
-use frontend\forms\ContactForm;
+use board\forms\users\LoginForm;
+use board\forms\users\PasswordResetRequestForm;
+use board\forms\users\ResetPasswordForm;
+use board\forms\users\SignupForm;
+use board\forms\contact\ContactForm;
 
 /**
  * Site controller

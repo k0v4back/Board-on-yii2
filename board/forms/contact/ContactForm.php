@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\forms;
+namespace board\forms\contact;
 
 use Yii;
 use yii\base\Model;

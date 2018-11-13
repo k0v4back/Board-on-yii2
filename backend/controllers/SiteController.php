@@ -2,12 +2,11 @@
 
 namespace backend\controllers;
 
-use common\services\LoginService;
+use board\services\users\LoginService;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use common\forms\LoginForm;
+use board\forms\users\LoginForm;
 
 /**
  * Site controller
@@ -81,6 +80,10 @@ class SiteController extends Controller
                 Yii::$app->session->setFlash('error', $e->getMessage());
             }
         }
+
+        return $this->render('login', [
+            'model' => $form,
+        ]);
     }
 
     /**

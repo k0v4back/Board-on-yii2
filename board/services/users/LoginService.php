@@ -1,9 +1,9 @@
 <?php
 
-namespace common\services;
+namespace board\services\users;
 
-use common\forms\LoginForm;
-use common\repositories\UserRepository;
+use board\forms\users\LoginForm;
+use board\repositories\UserRepository;
 
 class LoginService
 {

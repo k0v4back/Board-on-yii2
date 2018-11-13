@@ -2,12 +2,12 @@
 
 namespace common\bootstrap;
 
-use frontend\services\users\PasswordResetRequestService;
+use board\services\users\PasswordResetRequestService;
 use yii\base\BootstrapInterface;
 use Yii;
 use yii\di\Instance;
 use yii\mail\MailerInterface;
-use frontend\services\contact\ContactService;
+use board\services\contact\ContactService;
 
 class SetUp implements BootstrapInterface
 {

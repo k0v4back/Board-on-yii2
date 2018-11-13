@@ -2,7 +2,7 @@
 namespace frontend\tests\unit\models;
 
 use common\fixtures\UserFixture;
-use frontend\forms\SignupForm;
+use board\forms\users\SignupForm;
 
 class SignupFormTest extends \Codeception\Test\Unit
 {
@@ -32,7 +32,7 @@ class SignupFormTest extends \Codeception\Test\Unit
 
         $user = $model->signup();
 
-        expect($user)->isInstanceOf('common\entities\User');
+        expect($user)->isInstanceOf('board\entities\User');
 
         expect($user->username)->equals('some_username');
         expect($user->email)->equals('some_email@example.com');

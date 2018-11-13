@@ -1,8 +1,8 @@
 <?php
 
-namespace common\repositories;
+namespace board\repositories;
 
-use common\entities\User;
+use board\entities\User;
 use DomainException;
 
 class UserRepository
