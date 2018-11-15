@@ -2,26 +2,18 @@
 
 namespace backend\controllers;
 
-use board\forms\creative\User\UserCreateForm;
-use board\services\creative\UserManageService;
 use Yii;
-use board\entities\User;
-use backend\search\UserSearch;
+use board\entities\Regions;
+use backend\search\RegionsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * UserController implements the CRUD actions for User model.
+ * RegionsController implements the CRUD actions for Regions model.
  */
-class UserController extends Controller
+class RegionsController extends Controller
 {
-    private $service;
-    public function __construct($id, $module, UserManageService $service, $config = [])
-    {
-        parent::__construct($id, $module, $config);
-        $this->service = $service;
-    }
     /**
      * {@inheritdoc}
      */
@@ -38,24 +30,22 @@ class UserController extends Controller
     }
 
     /**
-     * Lists all User models.
+     * Lists all Regions models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new UserSearch();
+        $searchModel = new RegionsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $query = User::find()->orderBy(['id'=>SORT_DESC]);
 
         return $this->render('index', [
-            'query' => $query,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single User model.
+     * Displays a single Regions model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -68,30 +58,25 @@ class UserController extends Controller
     }
 
     /**
-     * Creates a new User model.
+     * Creates a new Regions model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $form = new UserCreateForm();
-        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
-            try {
-                $user = $this->service->create($form);
-                Yii::$app->session->setFlash('success', 'Пользователь успешно создан');
-                return $this->redirect(['view', 'id' => $user->id]);
-            } catch (\DomainException $e) {
-                Yii::$app->errorHandler->logException($e);
-                Yii::$app->session->setFlash('error', $e->getMessage());
-            }
+        $model = new Regions();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
+
         return $this->render('create', [
-            'model' => $form,
+            'model' => $model,
         ]);
     }
 
     /**
-     * Updates an existing User model.
+     * Updates an existing Regions model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -111,7 +96,7 @@ class UserController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
+     * Deletes an existing Regions model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -125,15 +110,15 @@ class UserController extends Controller
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the Regions model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return User the loaded model
+     * @return Regions the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne($id)) !== null) {
+        if (($model = Regions::findOne($id)) !== null) {
             return $model;
         }
 
