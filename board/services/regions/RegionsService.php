@@ -4,6 +4,7 @@ namespace board\services\regions;
 
 use board\entities\Regions;
 use board\forms\regions\RegionsCreateForm;
+use board\forms\regions\RegionsUpdateForm;
 use board\repositories\RegionsRepository;
 
 class RegionsService
@@ -24,5 +25,16 @@ class RegionsService
         );
         $this->regionRespository->save($region);
         return $region;
+    }
+
+    public function edit($id, RegionsUpdateForm $form): void
+    {
+        $region = $this->regionRespository->get($id);
+        $region->edit(
+            $form->name,
+            $form->parent_id,
+            $form->slug
+        );
+        $this->regionRespository->save($region);
     }
 }

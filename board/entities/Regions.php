@@ -2,6 +2,7 @@
 
 namespace board\entities;
 
+use phpDocumentor\Reflection\Types\Integer;
 use Yii;
 use yii\helpers\Inflector;
 
@@ -30,6 +31,13 @@ class Regions extends \yii\db\ActiveRecord
         $region->parent_id = $parent_id;
         if($slug) $region->slug = $slug ; $region->slug = Inflector::slug($name);
         return $region;
+    }
+
+    public function edit(string $name, Integer $parent_id, $slug = null): void
+    {
+        $this->name = $name;
+        $this->parent_id = $parent_id;
+        $this->slug = $slug;
     }
 
     /**

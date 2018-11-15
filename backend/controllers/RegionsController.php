@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use board\forms\regions\RegionsCreateForm;
+use board\forms\regions\RegionsUpdateForm;
 use board\services\regions\RegionsService;
 use Yii;
 use board\entities\Regions;
@@ -101,14 +102,26 @@ class RegionsController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $region = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        //        if ($region->load(Yii::$app->request->post()) && $region->save()) {
+//            return $this->redirect(['view', 'id' => $region->id]);
+//        }
+
+        $form = new RegionsUpdateForm($region);
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->regionsService->edit($region->id, $form);
+                return $this->redirect(['view', 'id' => $region->id]);
+            } catch (\DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'model' => $form,
+            'region' => $region,
         ]);
     }
 
@@ -135,8 +148,8 @@ class RegionsController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Regions::findOne($id)) !== null) {
-            return $model;
+        if (($region = Regions::findOne($id)) !== null) {
+            return $region;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

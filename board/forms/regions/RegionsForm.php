@@ -6,9 +6,9 @@ use yii\base\Model;
 
 class RegionsForm extends Model
 {
-    public $username;
-    public $password;
-    public $rememberMe = true;
+    public $name;
+    public $parent_id;
+    public $slug;
 
     public function rules()
     {
