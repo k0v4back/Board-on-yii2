@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use board\forms\regions\RegionsCreateForm;
+use board\services\regions\RegionsService;
 use Yii;
 use board\entities\Regions;
 use backend\search\RegionsSearch;
@@ -14,6 +16,14 @@ use yii\filters\VerbFilter;
  */
 class RegionsController extends Controller
 {
+    private $regionsService;
+
+    public function __construct($id, $module, RegionsService $regionsService, $config = [])
+    {
+        $this->regionsService = $regionsService;
+        parent::__construct($id, $module, $config);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -64,14 +74,21 @@ class RegionsController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Regions();
+        $form = new RegionsCreateForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try{
+                $region = $this->regionsService->create($form);
+                Yii::$app->session->setFlash('success', 'Регион успешно добавлен');
+                return $this->redirect(['view', 'id' => $region->id]);
+            } catch (\DomainException $e){
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('success', 'Не удалось добавить регион');
+            }
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'model' => $form,
         ]);
     }
 

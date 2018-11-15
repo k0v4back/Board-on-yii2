@@ -1,5 +1,5 @@
 <?php
-namespace board\forms\contact;
+namespace board\forms\regions;
 
 use board\entities\Regions;
 use yii\base\Model;
