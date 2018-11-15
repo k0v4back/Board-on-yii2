@@ -45,8 +45,23 @@ class UserController extends Controller
     {
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+
+
+        $query = User::find()->orderBy(['id'=>SORT_DESC]);
+//        $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => 5]);
+//        $models = $query->offset($pages->offset)
+//            ->limit($pages->limit)
+//            ->all();
 
         return $this->render('index', [
+//            'models' => $models,
+//            'pages' => $pages,
+            'query' => $query,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
