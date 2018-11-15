@@ -60,6 +60,18 @@ class User extends ActiveRecord implements IdentityInterface
         return $user;
     }
 
+    public static function fakerCreate($username, $email, $password, $status)
+    {
+        $user = new static();
+        $user->username = $username;
+        $user->email = $email;
+        $user->setPassword($password);
+        $user->created_at = time();
+        $user->status = $status;
+        $user->generateAuthKey();
+        return $user;
+    }
+
     public function confirmSignup()
     {
         if (!$this->isWait()) {
