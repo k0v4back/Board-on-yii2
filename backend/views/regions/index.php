@@ -7,30 +7,43 @@ use yii\grid\GridView;
 /* @var $searchModel backend\search\RegionsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Regions';
+$this->title = 'Регионы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="regions-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
-        <?= Html::a('Create Regions', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать регион', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <div class="box box-info">
+        <div class="box-body" style="overflow-y: hidden">
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'name',
-            'slug',
-            'parent_id',
+                    [
+                        'attribute' => 'id',
+                        'label' => 'Идентификатор',
+                    ],
+                    [
+                        'attribute' => 'name',
+                        'label' => 'Имя',
+                    ],
+                    [
+                        'attribute' => 'slug',
+                        'label' => 'Слаг',
+                    ],
+                    [
+                        'attribute' => 'parent_id',
+                        'label' => 'Родительский идентификатор',
+                    ],
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                    ['class' => 'yii\grid\ActionColumn'],
+                ],
+            ]); ?>
+        </div>
+    </div>
 </div>
