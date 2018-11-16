@@ -33,13 +33,12 @@ class Regions extends \yii\db\ActiveRecord
         return $region;
     }
 
-    public function edit(string $name, Integer $parent_id, $slug = null): void
+    public function edit($name, $parent_id, $slug = null): void
     {
         $this->name = $name;
         $this->parent_id = $parent_id;
         $this->slug = $slug;
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */

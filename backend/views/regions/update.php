@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+
 
 /* @var $this yii\web\View */
 /* @var $model board\entities\Regions */
@@ -12,10 +14,21 @@ $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="regions-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="regions-form">
 
-    <?= $this->render('_form', [
-        'model' => $region,
-    ]) ?>
+        <?php $form = ActiveForm::begin(); ?>
 
+        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'parent_id')->textInput() ?>
+
+        <div class="form-group">
+            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+
+    </div>
 </div>

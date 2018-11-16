@@ -9,7 +9,10 @@ class RegionsRepository
 {
     public function get($id): Regions
     {
-        return $this->getBy(['id' => $id]);
+        if(!$region = Regions::findOne($id)){
+            throw new DomainException('Регион не найден');
+        }
+        return $region;
     }
 
     public function save(Regions $region)
@@ -17,13 +20,5 @@ class RegionsRepository
         if (!$region->save()) {
             throw new \RuntimeException('Ошибка при сохранении.');
         }
-    }
-
-    private function getBy(array $condition): Regions
-    {
-        if (!$region = Regions::find()->andWhere($condition)->limit(1)->one()) {
-            throw new DomainException('Регион не найден.');
-        }
-        return $region;
     }
 }
