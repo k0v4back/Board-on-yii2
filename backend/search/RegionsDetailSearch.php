@@ -28,7 +28,6 @@ class RegionsDetailSearch extends Regions
      */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
@@ -41,8 +40,6 @@ class RegionsDetailSearch extends Regions
      */
     public function search($params)
     {
-//        var_dump($params);die();
-//        $query = Regions::find();
         $query = Regions::find()->where(['parent_id' => $params['id']]);
 
         // add conditions that should always apply here

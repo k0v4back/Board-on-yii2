@@ -6,6 +6,7 @@ use board\entities\Regions;
 use board\forms\regions\RegionsCreateForm;
 use board\forms\regions\RegionsUpdateForm;
 use board\repositories\RegionsRepository;
+use yii\helpers\ArrayHelper;
 
 class RegionsService
 {
@@ -36,5 +37,12 @@ class RegionsService
             $form->slug
         );
         $this->regionRespository->save($region);
+    }
+
+    public function settlements()
+    {
+        $regions = Regions::find()->all();
+        $data1 = ArrayHelper::index($regions, 'id');
+        return ArrayHelper::getColumn($data1, 'name');
     }
 }

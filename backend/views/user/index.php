@@ -14,16 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?php
-
-    $dataProvider = new \yii\data\ActiveDataProvider([
+    <?php $dataProvider = new \yii\data\ActiveDataProvider([
         'query' => $query,
         'pagination' => [ 'pageSize' => 20 ],
-    ]);
-
-    ?>
+    ]); ?>
 
     <p>
         <?= Html::a('Создать пользователя', ['create'], ['class' => 'btn btn-success']) ?>

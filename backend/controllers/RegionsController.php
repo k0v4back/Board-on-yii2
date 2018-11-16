@@ -50,9 +50,19 @@ class RegionsController extends Controller
         $searchModel = new RegionsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+
+
+        $query = Regions::find()->where(['parent_id' => null]);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'query' => $query,
         ]);
     }
 
@@ -76,15 +86,6 @@ class RegionsController extends Controller
             'dataDetailProvider' => $dataDetailProvider,
             'searchDetailModel' => $searchDetailModel,
         ]);
-
-//        $model = Regions::find($id)->all();
-//        $model = Regions::find()->where(['parent_id' => $id])->all();
-//
-//        echo '<pre>';
-//        print_r($model);die();
-//        echo '</pre>';
-
-
     }
 
     /**
@@ -100,15 +101,18 @@ class RegionsController extends Controller
             try{
                 $region = $this->regionsService->create($form);
                 Yii::$app->session->setFlash('success', 'Регион успешно добавлен');
-                return $this->redirect(['view', 'id' => $region->id]);
+                if($region->parent_id > 0){return $this->redirect(['view', 'id' => $region->parent_id]); } else {return $this->redirect(['index']);}
             } catch (\DomainException $e){
                 Yii::$app->errorHandler->logException($e);
                 Yii::$app->session->setFlash('success', 'Не удалось добавить регион');
             }
         }
 
+        $data = $this->regionsService->settlements();
+
         return $this->render('create', [
             'model' => $form,
+            'data' => $data,
         ]);
     }
 

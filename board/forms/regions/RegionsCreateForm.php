@@ -13,6 +13,8 @@ class RegionsCreateForm extends Model
     {
         return [
             [['name'], 'required'],
+            ['name', 'unique', 'targetClass' => '\board\entities\Regions', 'message' => 'Это имя уже занято.'],
+            ['slug', 'unique', 'targetClass' => '\board\entities\Regions', 'message' => 'Этот слаг уже занят.'],
             [['parent_id'], 'integer'],
             [['name', 'slug'], 'string', 'max' => 255],
         ];

@@ -41,9 +41,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ]) ?>
         </div>
-    </div>
+    </div><br>
 
 
+    <h3>
+        Список населённых пунктов региона/округа - <?= $model->name ?>
+    </h3>
+    <p>
+        <?= Html::a('Создать населённы пункт', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
     <div class="box box-info">
         <div class="box-body" style="overflow-y: hidden">
             <?= GridView::widget([
@@ -59,6 +65,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'attribute' => 'name',
                         'label' => 'Имя',
+                        'value' => function ($searchModel) {
+                            return Html::a(Html::encode($searchModel->name), \yii\helpers\Url::to(['view', 'id' => $searchModel->id]));
+                        },
+                        'format' => 'raw',
                     ],
                     [
                         'attribute' => 'slug',

@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model board\entities\Regions */
 
-$this->title = 'Create Regions';
+$this->title = 'Создать регионы';
 $this->params['breadcrumbs'][] = ['label' => 'Regions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -17,14 +17,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Имя') ?>
 
-        <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'slug')->textInput(['maxlength' => true])->label('Слаг') ?>
 
-        <?= $form->field($model, 'parent_id')->textInput() ?>
+        <?=
+        $form->field($model, 'parent_id')->dropDownList($data, ['prompt'=>''])->label('К какому региону/краю привязать');
+        ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

@@ -12,6 +12,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="regions-index">
 
+    <?php $dataProvider = new \yii\data\ActiveDataProvider([
+        'query' => $query,
+        'pagination' => [ 'pageSize' => 20 ],
+    ]); ?>
+
     <p>
         <?= Html::a('Создать регион', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -31,6 +36,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'attribute' => 'name',
                         'label' => 'Имя',
+                        'value' => function ($searchModel) {
+                            return Html::a(Html::encode($searchModel->name), \yii\helpers\Url::to(['view', 'id' => $searchModel->id]));
+                        },
+                        'format' => 'raw',
+
                     ],
                     [
                         'attribute' => 'slug',
@@ -39,6 +49,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'attribute' => 'parent_id',
                         'label' => 'Родительский идентификатор',
+                        'value' => function ($searchModel) {
+                            if(!$searchModel->parent_id){
+                                return '<b>пустой</b>, это регион';
+                            }
+                        },
+                        'format' => 'raw',
                     ],
 
                     ['class' => 'yii\grid\ActionColumn'],
