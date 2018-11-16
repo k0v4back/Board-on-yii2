@@ -2,8 +2,6 @@
 
 namespace board\entities;
 
-use phpDocumentor\Reflection\Types\Integer;
-use Yii;
 use yii\helpers\Inflector;
 
 /**

@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\search\RegionsDetailSearch;
 use board\forms\regions\RegionsCreateForm;
 use board\forms\regions\RegionsUpdateForm;
 use board\services\regions\RegionsService;
@@ -63,9 +64,27 @@ class RegionsController extends Controller
      */
     public function actionView($id)
     {
+        $searchModel = new RegionsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchDetailModel = new RegionsDetailSearch();
+        $dataDetailProvider = $searchDetailModel->search(Yii::$app->request->queryParams);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'dataDetailProvider' => $dataDetailProvider,
+            'searchDetailModel' => $searchDetailModel,
         ]);
+
+//        $model = Regions::find($id)->all();
+//        $model = Regions::find()->where(['parent_id' => $id])->all();
+//
+//        echo '<pre>';
+//        print_r($model);die();
+//        echo '</pre>';
+
+
     }
 
     /**
