@@ -2,6 +2,9 @@
 
 namespace board\entities;
 
+use paulzi\nestedsets\NestedSetsBehavior;
+use board\entities\queries\CategoryQuery;
+
 /**
  * This is the model class for table "borad_categories".
  *
@@ -43,6 +46,24 @@ class Category extends \yii\db\ActiveRecord
         $category->depth = $depth;
     }
 
+    public function behaviors(): array
+    {
+        return [
+            NestedSetsBehavior::class,
+        ];
+    }
+
+    public function transactions(): array
+    {
+        return [
+            self::SCENARIO_DEFAULT => self::OP_ALL,
+        ];
+    }
+
+    public static function find(): CategoryQuery
+    {
+        return new CategoryQuery(static::class);
+    }
 
     public static function tableName()
     {

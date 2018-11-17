@@ -64,7 +64,7 @@ class СategoryService
     private function assertIsNotRoot(Category $category): void
     {
         if ($category->isRoot()) {
-            throw new \DomainException('Unable to manage the root category.');
+            throw new \DomainException('Нету root категории.');
         }
     }
 }
