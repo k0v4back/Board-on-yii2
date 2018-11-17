@@ -33,6 +33,7 @@
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Пользователи', 'icon' => 'users', 'url' => ['/user']],
                     ['label' => 'Регионы', 'icon' => 'home', 'url' => ['/regions']],
+                    ['label' => 'Категории', 'icon' => 'bookmark', 'url' => ['/category']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     [
                         'label' => 'Some tools',

@@ -16,6 +16,8 @@ use board\entities\queries\CategoryQuery;
  * @property int $lft
  * @property int $rgt
  * @property int $depth
+ *
+ * @property Category $parent
  */
 class Category extends \yii\db\ActiveRecord
 {

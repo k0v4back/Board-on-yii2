@@ -20,17 +20,18 @@ class CategoriesForm extends Model
 
     private $_category;
 
-    public function __construct(Category $categories, $config = [])
+    public function __construct(Category $categories = null, $config = [])
     {
-        $categories->name = $this->name;
-        $categories->slug = $this->slug;
-        $categories->title = $this->title;
-        $categories->description = $this->description;
-        $categories->lft = $this->lft;
-        $categories->rgt = $this->rgt;;
-        $categories->depth = $this->depth;
-
-        $this->parentId = $categories->parent ? $categories->parent->id : null;
+        if($categories){
+            $categories->name = $this->name;
+            $categories->slug = $this->slug;
+            $categories->title = $this->title;
+            $categories->description = $this->description;
+            $categories->lft = $this->lft;
+            $categories->rgt = $this->rgt;;
+            $categories->depth = $this->depth;
+            $this->parentId = $categories->parent ? $categories->parent->id : null;
+        }
 
         parent::__construct($config);
     }
@@ -38,9 +39,8 @@ class CategoriesForm extends Model
     public function rules()
     {
         return [
-            [['name', 'slug', 'meta_json', 'lft', 'rgt', 'depth'], 'required'],
+            [['name', 'slug', 'lft', 'rgt', 'depth'], 'required'],
             [['description'], 'string'],
-            [['meta_json'], 'safe'],
             [['lft', 'rgt', 'depth'], 'integer'],
             [['name', 'slug', 'title'], 'string', 'max' => 255],
             ['slug', SlugValidator::class],

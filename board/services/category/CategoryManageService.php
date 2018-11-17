@@ -6,7 +6,7 @@ use board\entities\Category;
 use board\repositories\CategoriesRepository;
 use board\forms\categories\CategoriesForm;
 
-class СategoryService
+class CategoryManageService
 {
     private $categories;
 
