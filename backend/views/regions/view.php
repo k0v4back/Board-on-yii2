@@ -9,9 +9,14 @@ use yii\grid\GridView;
 /* @var $model board\entities\Regions */
 /* @var $searchModel backend\search\RegionsDetailSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $breadcrumbs \backend\controllers\RegionsController */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Regions', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Регионы', 'url' => ['index']];
+if($model->parent_id){
+    $this->params['breadcrumbs'][] = ['label' => $breadcrumbs[$model->parent_id]['name'], 'url' => ['view', 'id' => $model->parent_id]];
+}
+
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="regions-view">
@@ -28,6 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
+
+    <?php
+
+//    echo $model->parent_id;
+//    die();
+    ?>
+
 
     <div class="box box-info">
         <div class="box-body">

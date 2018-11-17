@@ -50,13 +50,6 @@ class RegionsController extends Controller
         $searchModel = new RegionsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-
-//        return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
-//        ]);
-
-
         $query = Regions::find()->where(['parent_id' => null]);
 
         return $this->render('index', [
@@ -78,6 +71,7 @@ class RegionsController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $searchDetailModel = new RegionsDetailSearch();
         $dataDetailProvider = $searchDetailModel->search(Yii::$app->request->queryParams);
+        $breadcrumbs = $this->regionsService->breadcrumbs($this->findModel($id));
 
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -85,6 +79,7 @@ class RegionsController extends Controller
             'dataProvider' => $dataProvider,
             'dataDetailProvider' => $dataDetailProvider,
             'searchDetailModel' => $searchDetailModel,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
 

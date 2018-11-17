@@ -45,4 +45,13 @@ class RegionsService
         $data1 = ArrayHelper::index($regions, 'id');
         return ArrayHelper::getColumn($data1, 'name');
     }
+
+    public function breadcrumbs($id)
+    {
+        $data = Regions::find()->where(['id' => $id])->all();
+        $result = ArrayHelper::index($data, function ($element) {
+            return $element['id'];
+        });
+        return $result;
+    }
 }
