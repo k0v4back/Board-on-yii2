@@ -75,12 +75,6 @@ class CategoryController extends Controller
      */
     public function actionCreate()
     {
-//        $model = new Category();
-//
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->id]);
-//        }
-
         $form = new CategoriesForm();
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
@@ -93,7 +87,6 @@ class CategoryController extends Controller
                 Yii::$app->session->setFlash('danger', 'Возникла ошибка при сохранении категории.  ' . $e);
             }
         }
-
         return $this->render('create', [
             'model' => $form,
         ]);
@@ -111,7 +104,6 @@ class CategoryController extends Controller
         $category = $this->findModel($id);
 
         $form = new CategoriesUpdateForm($category);
-
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try{
                 $this->manageService->edit($category->id, $form);
@@ -139,8 +131,16 @@ class CategoryController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+//        $this->findModel($id)->delete();
+//
+//        return $this->redirect(['index']);
 
+        try {
+            $this->manageService->remove($id);
+        } catch (\DomainException $e) {
+            Yii::$app->errorHandler->logException($e);
+            Yii::$app->session->setFlash('error', $e->getMessage());
+        }
         return $this->redirect(['index']);
     }
 

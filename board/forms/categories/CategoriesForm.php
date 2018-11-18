@@ -3,8 +3,8 @@
 namespace board\forms\categories;
 
 use board\entities\Category;
-use board\validators\SlugValidator;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 
 class CategoriesForm extends Model
 {
@@ -33,19 +33,16 @@ class CategoriesForm extends Model
             $this->parentId = $categories->parent ? $categories->parent->id : null;
             $this->_category = $categories;
         }
-
         parent::__construct($config);
     }
 
     public function rules()
     {
         return [
-            [['name', 'slug', 'lft', 'rgt', 'depth'], 'required'],
+            [['name', 'slug'], 'required'],
             [['description'], 'string'],
             [['parentId'], 'integer'],
-            [['lft', 'rgt', 'depth'], 'integer'],
             [['name', 'slug', 'title'], 'string', 'max' => 255],
-            ['slug', SlugValidator::class],
             [['name', 'slug'], 'unique', 'targetClass' => Category::class, 'filter' => $this->_category ? ['<>', 'id', $this->_category->id] : null]
         ];
     }

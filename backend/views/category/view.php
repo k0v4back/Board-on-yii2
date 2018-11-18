@@ -12,14 +12,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="category-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены что хотите удалить эту категорию?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -29,13 +27,30 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'name',
-            'slug',
-            'title',
-            'description:ntext',
-            'lft',
-            'rgt',
-            'depth',
+            [
+                'attribute' => 'name',
+                'label' => 'Имя',
+            ],
+            [
+                'attribute' => 'slug',
+                'label' => 'Слаг',
+            ],
+            [
+                'attribute' => 'title',
+                'label' => 'Заголовок',
+            ],
+            [
+                'attribute' => 'description',
+                'label' => 'Описание',
+            ],
+            [
+                'attribute' => 'depth',
+                'label' => 'Глубинак категории',
+            ],
+            [
+                'attribute' => 'parentId',
+                'label' => 'Id родительской категории',
+            ],
         ],
     ]) ?>
 

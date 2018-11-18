@@ -16,16 +16,17 @@ use board\entities\queries\CategoryQuery;
  * @property int $lft
  * @property int $rgt
  * @property int $depth
+ * @property int $parentId
  *
  * @property Category $parent
  * @mixin NestedSetsBehavior
  */
 class Category extends \yii\db\ActiveRecord
 {
-    public static function create($id, $name, $slug, $title, $description, $lft, $rgt, $depth)
+    public static function create($parentId, $name, $slug, $title, $description, $lft, $rgt, $depth)
     {
         $category = new static();
-        $category->id = $id;
+        $category->parentId = $parentId;
         $category->name = $name;
         $category->slug = $slug;
         $category->title = $title;

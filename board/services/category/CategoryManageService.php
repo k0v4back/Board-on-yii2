@@ -46,11 +46,12 @@ class CategoryManageService
             $form->rgt,
             $form->depth
         );
-        if ($form->parentId !== $category->parent->id) {
+        if ($form->parentId !== 0) {
             $parent = $this->categories->get($form->parentId);
             $category->appendTo($parent);
         }
         $this->categories->save($category);
+//        var_dump($category->parent);die();
     }
 
     public function remove($id): void
