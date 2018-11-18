@@ -18,6 +18,7 @@ use board\entities\queries\CategoryQuery;
  * @property int $depth
  *
  * @property Category $parent
+ * @mixin NestedSetsBehavior
  */
 class Category extends \yii\db\ActiveRecord
 {
