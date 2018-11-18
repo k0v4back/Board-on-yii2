@@ -41,12 +41,15 @@ class CategorySearch extends Category
      */
     public function search($params)
     {
-        $query = Category::find();
+        $query = Category::find()->andWhere(['>', 'depth', 0]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => ['lft' => SORT_ASC]
+            ]
         ]);
 
         $this->load($params);
