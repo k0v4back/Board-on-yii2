@@ -18,6 +18,9 @@ use board\entities\queries\CategoryQuery;
  * @property int $depth
  * @property int $parentId
  *
+ * @property Category $prev
+ * @property Category $next
+ *
  * @property Category $parent
  * @mixin NestedSetsBehavior
  */

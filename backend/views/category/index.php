@@ -26,6 +26,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     'id',
                     [
+                        'value' => function (\board\entities\Category $model) {
+                            return
+                                Html::a('<span class="glyphicon glyphicon-arrow-up"></span>', ['move-up', 'id' => $model->id], [
+                                        'data-method' => 'post',
+                                ]) .
+                                Html::a('<span class="glyphicon glyphicon-arrow-down"></span>', ['move-down', 'id' => $model->id], [
+                                    'data-method' => 'post',
+                                ]);
+                        },
+                        'format' => 'raw',
+                        'contentOptions' => ['style' => 'text-align: center'],
+                    ],
+                    [
                         'attribute' => 'name',
                         'value' => function (\board\entities\Category $model) {
                             $indent = ($model->depth > 1 ? str_repeat('&nbsp;&nbsp;', $model->depth - 1) . ' ' : '');

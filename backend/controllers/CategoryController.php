@@ -35,6 +35,8 @@ class CategoryController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'move-up' => ['POST'],
+                    'move-down' => ['POST'],
                 ],
             ],
         ];
@@ -109,7 +111,6 @@ class CategoryController extends Controller
                 $this->manageService->edit($category->id, $form);
                 Yii::$app->session->setFlash('success', 'Категория успешно обновлена');
                 return $this->redirect(['view', 'id' => $category->id]);
-//                var_dump($data);die();
             } catch (\DomainException $e) {
                 Yii::$app->errorHandler->logException($e);
                 Yii::$app->session->setFlash('danger', 'Возникла ошибка при обновлении категории.  ' . $e);
@@ -127,20 +128,27 @@ class CategoryController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
-//        $this->findModel($id)->delete();
-//
-//        return $this->redirect(['index']);
-
         try {
             $this->manageService->remove($id);
         } catch (\DomainException $e) {
             Yii::$app->errorHandler->logException($e);
             Yii::$app->session->setFlash('error', $e->getMessage());
         }
+        return $this->redirect(['index']);
+    }
+
+    public function actionMoveUp($id)
+    {
+        $this->manageService->moveUp($id);
+        return $this->redirect(['index']);
+    }
+
+    public function actionMoveDown($id)
+    {
+        $this->manageService->moveDown($id);
         return $this->redirect(['index']);
     }
 
