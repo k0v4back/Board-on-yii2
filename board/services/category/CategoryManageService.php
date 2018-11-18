@@ -33,12 +33,11 @@ class CategoryManageService
         return $category;
     }
 
-    public function edit($id, CategoriesForm $form): void
+    public function edit($id, $form)
     {
         $category = $this->categories->get($id);
         $this->assertIsNotRoot($category);
         $category->edit(
-            $form->parentId,
             $form->name,
             $form->slug,
             $form->title,

@@ -6,7 +6,7 @@ use board\entities\Category;
 use board\validators\SlugValidator;
 use yii\base\Model;
 
-class CategoriesForm extends Model
+class CategoriesUpdateForm extends Model
 {
     public $name;
     public $slug;
@@ -31,7 +31,6 @@ class CategoriesForm extends Model
             $this->rgt = $categories->rgt;
             $this->depth = $categories->depth;
             $this->parentId = $categories->parent ? $categories->parent->id : null;
-            $this->_category = $categories;
         }
 
         parent::__construct($config);
@@ -45,8 +44,6 @@ class CategoriesForm extends Model
             [['parentId'], 'integer'],
             [['lft', 'rgt', 'depth'], 'integer'],
             [['name', 'slug', 'title'], 'string', 'max' => 255],
-            ['slug', SlugValidator::class],
-            [['name', 'slug'], 'unique', 'targetClass' => Category::class, 'filter' => $this->_category ? ['<>', 'id', $this->_category->id] : null]
         ];
     }
 

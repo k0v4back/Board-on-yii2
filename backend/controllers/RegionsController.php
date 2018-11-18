@@ -122,10 +122,6 @@ class RegionsController extends Controller
     {
         $region = $this->findModel($id);
 
-        //        if ($region->load(Yii::$app->request->post()) && $region->save()) {
-//            return $this->redirect(['view', 'id' => $region->id]);
-//        }
-
         $form = new RegionsUpdateForm($region);
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {

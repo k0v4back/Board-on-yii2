@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use board\forms\categories\CategoriesUpdateForm;
 use Yii;
 use board\entities\Category;
 use backend\search\CategorySearch;
@@ -107,14 +108,25 @@ class CategoryController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $category = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $form = new CategoriesUpdateForm($category);
+
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try{
+                $this->manageService->edit($category->id, $form);
+                Yii::$app->session->setFlash('success', 'Категория успешно обновлена');
+                return $this->redirect(['view', 'id' => $category->id]);
+//                var_dump($data);die();
+            } catch (\DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('danger', 'Возникла ошибка при обновлении категории.  ' . $e);
+            }
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'model' => $form,
+            'category' => $category,
         ]);
     }
 
@@ -145,6 +157,6 @@ class CategoryController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('Заправшиваемая страница не существует.');
     }
 }

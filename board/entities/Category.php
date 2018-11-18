@@ -36,10 +36,9 @@ class Category extends \yii\db\ActiveRecord
         return $category;
     }
 
-    public static function edit($id, $name, $slug, $title, $description, $lft, $rgt, $depth)
+    public function edit($name, $slug, $title, $description, $lft, $rgt, $depth): void
     {
         $category = new static();
-        $category->id = $id;
         $category->name = $name;
         $category->slug = $slug;
         $category->title = $title;
