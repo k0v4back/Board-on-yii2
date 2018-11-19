@@ -4,12 +4,29 @@ namespace frontend\controllers\cabinet;
 
 use board\forms\users\EditNameForm;
 use board\services\users\EditNameService;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use Yii;
 use yii\web\NotFoundHttpException;
 
 class ProfileController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'edit'],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public $nameService;
 
     public function __construct($id, $module, EditNameService $nameService , $config = [])
