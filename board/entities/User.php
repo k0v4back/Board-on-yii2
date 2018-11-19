@@ -48,6 +48,12 @@ class User extends ActiveRecord implements IdentityInterface
         $this->updated_at = time();
     }
 
+    public function editUsername(string $username, string $last_name)
+    {
+        $this->username = $username;
+        $this->last_name = $last_name;
+    }
+
     //For admin generate user
     public static function create($username, $email, $password)
     {
