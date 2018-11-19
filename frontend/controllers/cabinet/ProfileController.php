@@ -20,7 +20,7 @@ class ProfileController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'edit', 'edit-phone'],
+                        'actions' => ['index', 'edit', 'edit-phone', 'phone-verified'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -30,7 +30,7 @@ class ProfileController extends Controller
 
     public $profileService;
 
-    public function __construct($id, $module, EditProfileService $profileService , $config = [])
+    public function __construct($id, $module, EditProfileService $profileService, $config = [])
     {
         $this->profileService = $profileService;
         parent::__construct($id, $module, $config);
@@ -38,7 +38,12 @@ class ProfileController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $id = Yii::$app->user->getId();
+        $model = $this->findModel($id);
+
+        return $this->render('index', [
+            'model' => $model,
+        ]);
     }
 
     public function actionEdit()
@@ -48,8 +53,8 @@ class ProfileController extends Controller
 
         $form = new EditNameForm($model);
 
-        if($form->load(Yii::$app->request->post()) && $form->validate()){
-            try{
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
                 $this->profileService->editName(Yii::$app->user->identity->getId(), $form);
                 Yii::$app->session->setFlash('success', 'Ваши данные успешно отредактированы');
                 return $this->redirect(['cabinet/profile/index']);
@@ -71,8 +76,8 @@ class ProfileController extends Controller
 
         $form = new EditPhoneForm($model);
 
-        if($form->load(Yii::$app->request->post()) && $form->validate()){
-            try{
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
                 $this->profileService->editPhone(Yii::$app->user->identity->getId(), $form);
                 Yii::$app->session->setFlash('success', 'Ваш телефон успешно отредактирован');
                 return $this->redirect(['cabinet/profile/index']);
@@ -81,9 +86,24 @@ class ProfileController extends Controller
                 return $this->redirect(['cabinet/profile/index']);
             }
         }
-        
+
         return $this->render('editPhone', [
             'model' => $form,
+        ]);
+    }
+
+    public function actionPhoneVerified()
+    {
+        $id = Yii::$app->user->getId();
+        $model = $this->findModel($id);
+
+        if($id && $model){
+            $model->code = null;
+            $this->profileService->code(Yii::$app->user->identity->getId());
+        }
+
+        return $this->render('phoneVerified', [
+            'model' => $model,
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace board\services\users;
 
 use board\forms\profile\EditNameForm;
 use board\forms\profile\EditPhoneForm;
+use board\forms\profile\VerifiedCodeForm;
 use board\repositories\UserRepository;
 
 class EditProfileService
@@ -37,6 +38,16 @@ class EditProfileService
         }
 
         $user->editPhone($form->phone);
+        $this->data->save($user);
+    }
+
+    public function code($id)
+    {
+        $user = $this->data->get($id);
+
+        $code = \Yii::$app->security->generateRandomString(6);
+
+        $user->generatePhoneVerifiedCode($code);
         $this->data->save($user);
     }
 }
