@@ -1,6 +1,7 @@
 <?php
 namespace board\entities;
 
+use phpDocumentor\Reflection\Types\Integer;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -21,12 +22,18 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $last_name
+ * @property string $phone
+ * @property string $phone_verified
+ * @property string $phone_verified_token
+ * @property string $phone_verified_token_expire
  * @property string $password write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_WAIT = 0;
     const STATUS_ACTIVE = 10;
+    const STATUS_NOT_PHONE_VERIFIED = 0;
+    const STATUS_SUCCESS_PHONE_VERIFIED = 1;
 
     public static function signup($username, $email, $password)
     {
@@ -52,6 +59,21 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->username = $username;
         $this->last_name = $last_name;
+    }
+
+    public function editPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
+    public function clearPhoneVerification()
+    {
+        $this->phone_verified = self::STATUS_NOT_PHONE_VERIFIED;
+    }
+
+    public function phoneVerification()
+    {
+        $this->phone_verified = self::STATUS_SUCCESS_PHONE_VERIFIED;
     }
 
     //For admin generate user

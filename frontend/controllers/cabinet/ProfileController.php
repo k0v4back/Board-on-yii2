@@ -2,8 +2,9 @@
 
 namespace frontend\controllers\cabinet;
 
-use board\forms\users\EditNameForm;
-use board\services\users\EditNameService;
+use board\forms\profile\EditNameForm;
+use board\forms\profile\EditPhoneForm;
+use board\services\users\EditProfileService;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use Yii;
@@ -19,7 +20,7 @@ class ProfileController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'edit'],
+                        'actions' => ['index', 'edit', 'edit-phone'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -27,11 +28,11 @@ class ProfileController extends Controller
         ];
     }
 
-    public $nameService;
+    public $profileService;
 
-    public function __construct($id, $module, EditNameService $nameService , $config = [])
+    public function __construct($id, $module, EditProfileService $profileService , $config = [])
     {
-        $this->nameService = $nameService;
+        $this->profileService = $profileService;
         parent::__construct($id, $module, $config);
     }
 
@@ -49,7 +50,7 @@ class ProfileController extends Controller
 
         if($form->load(Yii::$app->request->post()) && $form->validate()){
             try{
-                $this->nameService->edit(Yii::$app->user->identity->getId(), $form);
+                $this->profileService->editName(Yii::$app->user->identity->getId(), $form);
                 Yii::$app->session->setFlash('success', 'Ваши данные успешно отредактированы');
                 return $this->redirect(['cabinet/profile/index']);
             } catch (\Exception $e) {
@@ -59,6 +60,29 @@ class ProfileController extends Controller
         }
 
         return $this->render('edit', [
+            'model' => $form,
+        ]);
+    }
+
+    public function actionEditPhone()
+    {
+        $id = Yii::$app->user->getId();
+        $model = $this->findModel($id);
+
+        $form = new EditPhoneForm($model);
+
+        if($form->load(Yii::$app->request->post()) && $form->validate()){
+            try{
+                $this->profileService->editPhone(Yii::$app->user->identity->getId(), $form);
+                Yii::$app->session->setFlash('success', 'Ваш телефон успешно отредактирован');
+                return $this->redirect(['cabinet/profile/index']);
+            } catch (\Exception $e) {
+                Yii::$app->session->setFlash('danger', 'Возникла ошибка при редактировании телефона');
+                return $this->redirect(['cabinet/profile/index']);
+            }
+        }
+        
+        return $this->render('editPhone', [
             'model' => $form,
         ]);
     }

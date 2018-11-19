@@ -1,6 +1,6 @@
 <?php
 
-namespace board\forms\users;
+namespace board\forms\profile;
 
 use board\entities\User;
 use yii\base\Model;
