@@ -14,7 +14,11 @@ echo Yii::$app->user->identity->username;
 
 if ($model->phone && $model->phone_verified == 0) {
     ?>
-    <a href="<?= \yii\helpers\Url::to(['cabinet/profile/phone-verified']) ?>" class="btn btn-danger">Подтвердить телефон</a>
+    <a href="<?= \yii\helpers\Url::to(['cabinet/profile/code']) ?>" class="btn btn-danger">Подтвердить телефон</a>
+    <?php
+}else{
+    ?>
+        <h4>Телефон: <i><?= $model->phone ?></i>  успешно подтверждён!</h4>
     <?php
 }
 ?>

@@ -56,13 +56,16 @@ class EditProfileService
         $user = $this->data->get($id);
         $dbCode = $user->code;
 
-//        if($codeForm === $dbCode)
-//        {
-//            echo "Good";die();
-//        }else{
-//            echo "False";die();
-//        }
-
-//        var_dump($codeForm);die();
+        if($codeForm === $dbCode)
+        {
+            $user->phoneVerification();
+            $user->clearCode();
+            $this->data->save($user);
+            return \Yii::$app->getResponse()->redirect(array('cabinet/profile/index',302));
+        }else{
+            $user->clearPhoneVerification();
+            $this->data->save($user);
+            \Yii::$app->session->setFlash('danger', 'Вы ввели неверный код подтверждыения<br>Если вам не пришло сообщение, то через 10 минут попробуйти пройти подтверждение заново');
+        }
     }
 }

@@ -35,6 +35,7 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 10;
     const STATUS_NOT_PHONE_VERIFIED = 0;
     const STATUS_SUCCESS_PHONE_VERIFIED = 1;
+    const EMPTY_CODE = null;
 
     public static function signup($username, $email, $password)
     {
@@ -75,6 +76,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function phoneVerification()
     {
         $this->phone_verified = self::STATUS_SUCCESS_PHONE_VERIFIED;
+    }
+
+    public function clearCode()
+    {
+        $this->code = self::EMPTY_CODE;
     }
 
     public function generatePhoneVerifiedCode($code)

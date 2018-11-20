@@ -21,7 +21,7 @@ class ProfileController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'edit', 'edit-phone', 'phone-verified'],
+                        'actions' => ['index', 'edit', 'edit-phone', 'phone-verified', 'code'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -93,16 +93,27 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function actionPhoneVerified()
+    public function actionCode()
     {
-        $id = Yii::$app->user->getId();
-        $model = $this->findModel($id);
-
-        $model->code = null;
         $this->profileService->code(Yii::$app->user->identity->getId());
 
+        return $this->render('code');
+    }
+
+    public function actionPhoneVerified()
+    {
+        $form = new VerifiedCodeForm();
+
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            $id = Yii::$app->user->getId();
+            $model = $this->findModel($id);
+
+            $model->code = null;
+            $this->profileService->verifiedCode($form->code, Yii::$app->user->identity->getId());
+        }
+
         return $this->render('phoneVerified', [
-            'model' => $model,
+            'model' => $form,
         ]);
     }
 
