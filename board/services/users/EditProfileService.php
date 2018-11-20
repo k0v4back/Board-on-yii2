@@ -50,4 +50,19 @@ class EditProfileService
         $user->generatePhoneVerifiedCode($code);
         $this->data->save($user);
     }
+
+    public function verifiedCode($codeForm, $id)
+    {
+        $user = $this->data->get($id);
+        $dbCode = $user->code;
+
+//        if($codeForm === $dbCode)
+//        {
+//            echo "Good";die();
+//        }else{
+//            echo "False";die();
+//        }
+
+//        var_dump($codeForm);die();
+    }
 }

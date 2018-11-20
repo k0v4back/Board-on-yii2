@@ -4,6 +4,7 @@ namespace frontend\controllers\cabinet;
 
 use board\forms\profile\EditNameForm;
 use board\forms\profile\EditPhoneForm;
+use board\forms\profile\VerifiedCodeForm;
 use board\services\users\EditProfileService;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -97,10 +98,8 @@ class ProfileController extends Controller
         $id = Yii::$app->user->getId();
         $model = $this->findModel($id);
 
-        if($id && $model){
-            $model->code = null;
-            $this->profileService->code(Yii::$app->user->identity->getId());
-        }
+        $model->code = null;
+        $this->profileService->code(Yii::$app->user->identity->getId());
 
         return $this->render('phoneVerified', [
             'model' => $model,
