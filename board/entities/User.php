@@ -92,6 +92,11 @@ class User extends ActiveRecord implements IdentityInterface
         }
     }
 
+    public function generatePhoneVerifiedCode($code)
+    {
+        $this->code = $code;
+    }
+
     //For admin generate user
     public static function create($username, $email, $password)
     {

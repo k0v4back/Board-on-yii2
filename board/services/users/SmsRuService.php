@@ -43,7 +43,7 @@ class SmsRuService implements SmsSender
             curl_setopt($ch, CURLOPT_POSTFIELDS, [
                 "api_id"	=>	$this->appId,
                 "to"		=>	$number,
-                "text"		=>	$text]);
+                "text"		=>	'Код для подтверждения телефона: ' . $text]);
 
             $code=curl_exec($ch);
             curl_close($ch);

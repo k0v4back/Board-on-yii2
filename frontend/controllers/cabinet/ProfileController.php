@@ -7,31 +7,13 @@ use board\forms\profile\EditNameForm;
 use board\forms\profile\EditPhoneForm;
 use board\forms\profile\VerifiedCodeForm;
 use board\services\users\EditProfileService;
-use yii\filters\AccessControl;
 use yii\web\Controller;
 use Yii;
 use yii\web\NotFoundHttpException;
 
 class ProfileController extends Controller
 {
-//    public function behaviors()
-//    {
-//        return [
-//            'access' => [
-//                'class' => AccessControl::class,
-//                'rules' => [
-//                    [
-//                        'allow' => true,
-//                        'actions' => ['edit', 'edit-phone', 'phone-verified', 'code', 'test'],
-//                        'roles' => ['@'],
-//                    ],
-//                ],
-//            ],
-//        ];
-//    }
-
-    public $profileService;
-
+    private $profileService;
     public function __construct($id, $module, EditProfileService $profileService, $config = [])
     {
         $this->profileService = $profileService;
@@ -63,10 +45,10 @@ class ProfileController extends Controller
             try {
                 $this->profileService->editName(Yii::$app->user->identity->getId(), $form);
                 Yii::$app->session->setFlash('success', 'Ваши данные успешно отредактированы');
-                return $this->redirect(['cabinet/profile/index']);
+                return $this->redirect(['cabinet/profile/index', 'id' => $id]);
             } catch (\Exception $e) {
                 Yii::$app->session->setFlash('danger', 'Возникла ошибка при редактировании данных');
-                return $this->redirect(['cabinet/profile/index']);
+                return $this->redirect(['cabinet/profile/index', 'id' => $id]);
             }
         }
 
@@ -85,10 +67,10 @@ class ProfileController extends Controller
             try {
                 $this->profileService->editPhone(Yii::$app->user->identity->getId(), $form);
                 Yii::$app->session->setFlash('success', 'Ваш телефон успешно отредактирован');
-                return $this->redirect(['cabinet/profile/index']);
+                return $this->redirect(['cabinet/profile/index', 'id' => $id]);
             } catch (\Exception $e) {
                 Yii::$app->session->setFlash('danger', 'Возникла ошибка при редактировании телефона');
-                return $this->redirect(['cabinet/profile/index']);
+                return $this->redirect(['cabinet/profile/index', 'id' => $id]);
             }
         }
 
@@ -99,7 +81,6 @@ class ProfileController extends Controller
 
     public function actionCode($id)
     {
-        echo Yii::$app->user->identity->getId();die();
         $this->profileService->code(Yii::$app->user->identity->getId());
 
         return $this->render('code');
