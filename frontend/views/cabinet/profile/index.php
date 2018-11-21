@@ -17,8 +17,8 @@
                 <?php else : ?>
                     <span class="glyphicon glyphicon-remove" aria-hidden="true" title="Не подтверждён" style="color: #FF1E00;"></span> </p>
                 <?php endif; ?>
-            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/edit']) ?>" class="btn btn-default" style="margin-bottom: 10px">Редактировать профиль</a>
-            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/edit-phone']) ?>" class="btn btn-default">Редактировать телефон</a>
+            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/edit', 'id' => $model->id]) ?>" class="btn btn-default" style="margin-bottom: 10px">Редактировать профиль</a>
+            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/edit-phone', 'id' => $model->id]) ?>" class="btn btn-default">Редактировать телефон</a>
             <?php
         }
         ?>
@@ -170,7 +170,7 @@ function status($currentUser, $user, $model)
 
         if ($user->isPhoneVerified() && $model->phone_verified_token_expire == null && $model->phone && $model->phone_verified != 1) {
             ?>
-            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/code']) ?>" class="btn btn-danger">Подтвердить
+            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/code', 'id' => $model->id]) ?>" class="btn btn-danger">Подтвердить
                 телефон</a>
             <?php
         } elseif ($user->isPhoneVerified() && $model->phone_verified_token_expire == null && $model->phone) {
@@ -181,7 +181,7 @@ function status($currentUser, $user, $model)
 
         if (time() > $model->phone_verified_token_expire && $model->phone_verified_token_expire != null && $model->phone_verified == 0 && $model->phone) {
             ?>
-            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/code']) ?>" class="btn btn-danger">Подтвердить
+            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/code', 'id' => $model->id]) ?>" class="btn btn-danger">Подтвердить
                 телефон</a>
             <?php
         } elseif (time() < $model->phone_verified_token_expire && $model->phone_verified == 0) {

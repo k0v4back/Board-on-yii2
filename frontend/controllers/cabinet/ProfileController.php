@@ -42,12 +42,7 @@ class ProfileController extends Controller
     {
         $model = $this->findModel($id);
 
-//        $currentUser = Yii::$app->user->identity;
         $currentUser = User::guestOrOther($id);
-
-//        if(!Yii::$app->user->identity || Yii::$app->user->isGuest){
-//            $currentUser = null;
-//        }
 
         $user = new User();
 
@@ -58,9 +53,8 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function actionEdit()
+    public function actionEdit($id)
     {
-        $id = Yii::$app->user->getId();
         $model = $this->findModel($id);
 
         $form = new EditNameForm($model);
@@ -81,9 +75,8 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function actionEditPhone()
+    public function actionEditPhone($id)
     {
-        $id = Yii::$app->user->getId();
         $model = $this->findModel($id);
 
         $form = new EditPhoneForm($model);
@@ -104,8 +97,9 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function actionCode()
+    public function actionCode($id)
     {
+        echo Yii::$app->user->identity->getId();die();
         $this->profileService->code(Yii::$app->user->identity->getId());
 
         return $this->render('code');
