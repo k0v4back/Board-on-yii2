@@ -86,8 +86,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function generatePhoneVerifiedCode($code)
     {
         $this->code = $code;
-        $this->phone_verified_token = time();
-        $this->phone_verified_token_expire = time() + 600;
+//        if($this->code != null){
+//            $this->phone_verified_token = time();
+//            $this->phone_verified_token_expire = time() + 600;
+//        }
     }
 
     //For admin generate user

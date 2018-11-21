@@ -12,24 +12,24 @@ echo Yii::$app->user->identity->username;
 <?php
 
 
-if($user->isPhoneVerified() && $model->phone_verified_token_expire == null){
+if($user->isPhoneVerified() && $model->phone_verified_token_expire == null && $model->phone && $model->phone_verified != 1){
     ?>
         <a href="<?= \yii\helpers\Url::to(['cabinet/profile/code']) ?>" class="btn btn-danger">Подтвердить телефон</a>
     <?php
-}elseif($user->isPhoneVerified() && $model->phone_verified_token_expire == null){
+}elseif($user->isPhoneVerified() && $model->phone_verified_token_expire == null && $model->phone){
     ?>
         <h4>Телефон: <i><?= $model->phone ?></i> успешно подтверждён!</h4>
     <?php
 }
 
-if (time() > $model->phone_verified_token_expire && $model->phone_verified == 0){
+if (time() > $model->phone_verified_token_expire && $model->phone_verified_token_expire != null && $model->phone_verified == 0 && $model->phone){
     ?>
         <a href="<?= \yii\helpers\Url::to(['cabinet/profile/code']) ?>" class="btn btn-danger">Подтвердить телефон</a>
     <?php
 }elseif(time() < $model->phone_verified_token_expire && $model->phone_verified == 0){
     $expire = $model->phone_verified_token_expire - time();
     echo " Вам нужно подождать " . $expire . " cекунды для того чтобы повторить попытку подтверждыения телефона" ;
-}else{
+}elseif($model->phone_verified_token == 1){
     ?>
     <h4>Телефон: <i><?= $model->phone ?></i> успешно подтверждён!</h4>
     <?php

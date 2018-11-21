@@ -38,9 +38,9 @@ class SetUp implements BootstrapInterface
 //            $app->params['appId'],
 //        ]);
 
-//        $container->setSingleton(SmsRuService::class, function () use ($app) {
-//            return new SmsRuService($app->params['appId']);
-//        });
+        $container->setSingleton(SmsRuService::class, function () use ($app) {
+            return new SmsRuService(Yii::$app->params['appId']);
+        });
 
     }
 }

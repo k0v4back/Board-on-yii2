@@ -7,7 +7,6 @@ use board\forms\profile\EditNameForm;
 use board\forms\profile\EditPhoneForm;
 use board\forms\profile\VerifiedCodeForm;
 use board\services\users\EditProfileService;
-use board\services\users\SmsRuService;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use Yii;
@@ -23,7 +22,7 @@ class ProfileController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'edit', 'edit-phone', 'phone-verified', 'code'],
+                        'actions' => ['index', 'edit', 'edit-phone', 'phone-verified', 'code', 'test'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -32,12 +31,10 @@ class ProfileController extends Controller
     }
 
     public $profileService;
-    public $smsRuService;
 
-    public function __construct($id, $module, EditProfileService $profileService, SmsRuService $smsRuService, $config = [])
+    public function __construct($id, $module, EditProfileService $profileService, $config = [])
     {
         $this->profileService = $profileService;
-        $this->smsRuService = $smsRuService;
         parent::__construct($id, $module, $config);
     }
 
@@ -114,15 +111,7 @@ class ProfileController extends Controller
 
         $form = new VerifiedCodeForm();
 
-        $this->smsRuService->send($model->phone, 'Код для подтверждения телефона: ' . $form->code);
-
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
-
-            echo $model->code . '<br>';
-            echo $model->phone . '<br>';
-            echo $form->code . '<br>';
-
-//            die();
 
             $model->code = null;
             $this->profileService->verifiedCode($form->code, Yii::$app->user->identity->getId());

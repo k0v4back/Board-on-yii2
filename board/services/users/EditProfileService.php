@@ -8,10 +8,12 @@ use board\repositories\UserRepository;
 
 class EditProfileService
 {
+    public $smsRuService;
     private $data;
 
-    public function __construct(UserRepository $data)
+    public function __construct(UserRepository $data, SmsRuService $smsRuService)
     {
+        $this->smsRuService = $smsRuService;
         $this->data = $data;
     }
 
@@ -48,6 +50,8 @@ class EditProfileService
 
         $user->generatePhoneVerifiedCode($code);
         $this->data->save($user);
+        $this->smsRuService->send($user->phone, 'Код для подтверждения телефона: ' . $code);
+
     }
 
     public function verifiedCode($codeForm, $id)
