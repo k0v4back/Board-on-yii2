@@ -12,14 +12,31 @@ echo Yii::$app->user->identity->username;
 <?php
 
 
-if ($model->phone && $model->phone_verified == 0) {
+if($user->isPhoneVerified() && $model->phone_verified_token_expire == null){
     ?>
-    <a href="<?= \yii\helpers\Url::to(['cabinet/profile/code']) ?>" class="btn btn-danger">Подтвердить телефон</a>
+        <a href="<?= \yii\helpers\Url::to(['cabinet/profile/code']) ?>" class="btn btn-danger">Подтвердить телефон</a>
     <?php
-}else{
+}elseif($user->isPhoneVerified() && $model->phone_verified_token_expire == null){
     ?>
-        <h4>Телефон: <i><?= $model->phone ?></i>  успешно подтверждён!</h4>
+        <h4>Телефон: <i><?= $model->phone ?></i> успешно подтверждён!</h4>
     <?php
 }
+
+if (time() > $model->phone_verified_token_expire && $model->phone_verified == 0){
+    ?>
+        <a href="<?= \yii\helpers\Url::to(['cabinet/profile/code']) ?>" class="btn btn-danger">Подтвердить телефон</a>
+    <?php
+}elseif(time() < $model->phone_verified_token_expire && $model->phone_verified == 0){
+    $expire = $model->phone_verified_token_expire - time();
+    echo " Вам нужно подождать " . $expire . " cекунды для того чтобы повторить попытку подтверждыения телефона" ;
+}else{
+    ?>
+    <h4>Телефон: <i><?= $model->phone ?></i> успешно подтверждён!</h4>
+    <?php
+}
+
 ?>
+
+
+
 

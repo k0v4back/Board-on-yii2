@@ -86,6 +86,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function generatePhoneVerifiedCode($code)
     {
         $this->code = $code;
+        $this->phone_verified_token = time();
+        $this->phone_verified_token_expire = time() + 600;
     }
 
     //For admin generate user
@@ -130,6 +132,24 @@ class User extends ActiveRecord implements IdentityInterface
     public function isWait(): bool
     {
         return $this->status === self::STATUS_WAIT;
+    }
+
+    public function isPhoneVerified()
+    {
+        if($this->phone && $this->phone_verified == 0){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function isCodeExpier()
+    {
+        if (time() > $this->phone_verified_token_expire) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function requestPasswordReset()

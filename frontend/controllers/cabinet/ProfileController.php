@@ -2,6 +2,7 @@
 
 namespace frontend\controllers\cabinet;
 
+use board\entities\User;
 use board\forms\profile\EditNameForm;
 use board\forms\profile\EditPhoneForm;
 use board\forms\profile\VerifiedCodeForm;
@@ -42,8 +43,11 @@ class ProfileController extends Controller
         $id = Yii::$app->user->getId();
         $model = $this->findModel($id);
 
+        $user = new User();
+
         return $this->render('index', [
             'model' => $model,
+            'user' => $user,
         ]);
     }
 
