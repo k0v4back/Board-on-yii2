@@ -3,6 +3,7 @@
 namespace common\bootstrap;
 
 use board\services\users\PasswordResetRequestService;
+use board\services\users\SmsRuService;
 use yii\base\BootstrapInterface;
 use Yii;
 use yii\di\Instance;
@@ -32,6 +33,14 @@ class SetUp implements BootstrapInterface
             $app->params['adminEmail'],
             Instance::of(MailerInterface::class)
         ]);
+
+//        $container->setSingleton(SmsRuService::class, [], [
+//            $app->params['appId'],
+//        ]);
+
+//        $container->setSingleton(SmsRuService::class, function () use ($app) {
+//            return new SmsRuService($app->params['appId']);
+//        });
 
     }
 }

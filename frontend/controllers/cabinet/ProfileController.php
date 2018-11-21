@@ -7,6 +7,7 @@ use board\forms\profile\EditNameForm;
 use board\forms\profile\EditPhoneForm;
 use board\forms\profile\VerifiedCodeForm;
 use board\services\users\EditProfileService;
+use board\services\users\SmsRuService;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use Yii;
@@ -31,10 +32,12 @@ class ProfileController extends Controller
     }
 
     public $profileService;
+    public $smsRuService;
 
-    public function __construct($id, $module, EditProfileService $profileService, $config = [])
+    public function __construct($id, $module, EditProfileService $profileService, SmsRuService $smsRuService, $config = [])
     {
         $this->profileService = $profileService;
+        $this->smsRuService = $smsRuService;
         parent::__construct($id, $module, $config);
     }
 
@@ -106,16 +109,20 @@ class ProfileController extends Controller
 
     public function actionPhoneVerified()
     {
+        $id = Yii::$app->user->getId();
+        $model = $this->findModel($id);
+
         $form = new VerifiedCodeForm();
 
+        $this->smsRuService->send($model->phone, 'Код для подтверждения телефона: ' . $form->code);
+
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
-            $id = Yii::$app->user->getId();
-            $model = $this->findModel($id);
 
             echo $model->code . '<br>';
             echo $model->phone . '<br>';
             echo $form->code . '<br>';
-            die();
+
+//            die();
 
             $model->code = null;
             $this->profileService->verifiedCode($form->code, Yii::$app->user->identity->getId());
@@ -128,7 +135,7 @@ class ProfileController extends Controller
 
     protected function findModel($id)
     {
-        if (($user = \board\entities\User::findOne($id)) !== null) {
+        if (($user = User::findOne($id)) !== null) {
             return $user;
         }
         throw new NotFoundHttpException('The requested page does not exist.');
