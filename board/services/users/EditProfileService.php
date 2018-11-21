@@ -4,7 +4,6 @@ namespace board\services\users;
 
 use board\forms\profile\EditNameForm;
 use board\forms\profile\EditPhoneForm;
-use board\forms\profile\VerifiedCodeForm;
 use board\repositories\UserRepository;
 
 class EditProfileService

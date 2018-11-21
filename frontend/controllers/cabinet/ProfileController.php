@@ -112,6 +112,11 @@ class ProfileController extends Controller
             $id = Yii::$app->user->getId();
             $model = $this->findModel($id);
 
+            echo $model->code . '<br>';
+            echo $model->phone . '<br>';
+            echo $form->code . '<br>';
+            die();
+
             $model->code = null;
             $this->profileService->verifiedCode($form->code, Yii::$app->user->identity->getId());
         }
