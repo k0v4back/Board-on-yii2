@@ -51,7 +51,7 @@ class EditProfileService
 
         $user->generatePhoneVerifiedCode($code);
         $this->data->save($user);
-        $this->smsRuService->send($user->phone, 'Код для подтверждения телефона: ' . $code);
+        $this->smsRuService->send($user->phone, $code);
 
     }
 
@@ -68,7 +68,7 @@ class EditProfileService
             $user->phoneVerification();
             $user->clearCode();
             $this->data->save($user);
-            return \Yii::$app->getResponse()->redirect(array('cabinet/profile/index',302));
+            return \Yii::$app->getResponse()->redirect(array('cabinet/profile/index?id='.$id));
         }else{
             $user->clearPhoneVerification();
             $this->data->save($user);

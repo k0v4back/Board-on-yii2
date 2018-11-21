@@ -84,10 +84,13 @@ class ProfileController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->phone_verified_token_expire == null || time() > $model->phone_verified_token_expire) {
+        if ($model->phone_verified_token_expire == null && $model->phone_verified != 1 || time() > $model->phone_verified_token_expire && $model->phone_verified != 1) {
             $this->profileService->code(Yii::$app->user->identity->getId());
 
             return $this->render('code');
+        } elseif ($model->phone_verified == 1) {
+            Yii::$app->session->setFlash('info', 'Ваш телефон уже подтверждён!');
+            return $this->redirect(['cabinet/profile/index', 'id' => $id]);
         } else {
             $time = $model->phone_verified_token_expire - time();
             Yii::$app->session->setFlash('danger', 'Новый код будет отправлен через ' . $time . ' секунд');
@@ -102,10 +105,11 @@ class ProfileController extends Controller
 
         $form = new VerifiedCodeForm();
 
-//        echo var_dump($form);die();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
 
-        $model->code = null;
-        $this->profileService->verifiedCode($form->code, Yii::$app->user->identity->getId());
+            $model->code = null;
+            $this->profileService->verifiedCode($form->code, Yii::$app->user->identity->getId());
+        }
 
         return $this->render('phoneVerified', [
             'model' => $form,
