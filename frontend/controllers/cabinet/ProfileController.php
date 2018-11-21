@@ -14,21 +14,21 @@ use yii\web\NotFoundHttpException;
 
 class ProfileController extends Controller
 {
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'edit', 'edit-phone', 'phone-verified', 'code', 'test'],
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-        ];
-    }
+//    public function behaviors()
+//    {
+//        return [
+//            'access' => [
+//                'class' => AccessControl::class,
+//                'rules' => [
+//                    [
+//                        'allow' => true,
+//                        'actions' => ['edit', 'edit-phone', 'phone-verified', 'code', 'test'],
+//                        'roles' => ['@'],
+//                    ],
+//                ],
+//            ],
+//        ];
+//    }
 
     public $profileService;
 
@@ -38,16 +38,23 @@ class ProfileController extends Controller
         parent::__construct($id, $module, $config);
     }
 
-    public function actionIndex()
+    public function actionIndex($id)
     {
-        $id = Yii::$app->user->getId();
         $model = $this->findModel($id);
+
+//        $currentUser = Yii::$app->user->identity;
+        $currentUser = User::guestOrOther($id);
+
+//        if(!Yii::$app->user->identity || Yii::$app->user->isGuest){
+//            $currentUser = null;
+//        }
 
         $user = new User();
 
         return $this->render('index', [
             'model' => $model,
             'user' => $user,
+            'currentUser' => $currentUser,
         ]);
     }
 

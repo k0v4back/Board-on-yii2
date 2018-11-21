@@ -83,13 +83,13 @@ class User extends ActiveRecord implements IdentityInterface
         $this->code = self::EMPTY_CODE;
     }
 
-    public function generatePhoneVerifiedCode($code)
+    public static function guestOrOther($id)
     {
-        $this->code = $code;
-//        if($this->code != null){
-//            $this->phone_verified_token = time();
-//            $this->phone_verified_token_expire = time() + 600;
-//        }
+        if(Yii::$app->user->isGuest || Yii::$app->user->identity->id != $id){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     //For admin generate user
