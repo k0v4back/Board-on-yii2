@@ -44,6 +44,7 @@ class EditProfileService
 
     public function code($id)
     {
+
         $user = $this->data->get($id);
 
         $code = \Yii::$app->security->generateRandomString(6);
@@ -59,6 +60,9 @@ class EditProfileService
         $user = $this->data->get($id);
         $dbCode = $user->code;
 
+//        echo $dbCode.'<br>';
+//        echo $codeForm;die();
+
         if($codeForm === $dbCode)
         {
             $user->phoneVerification();
@@ -68,7 +72,8 @@ class EditProfileService
         }else{
             $user->clearPhoneVerification();
             $this->data->save($user);
-            \Yii::$app->session->setFlash('danger', 'Вы ввели неверный код подтверждыения<br>Если вам не пришло сообщение, то через 10 минут попробуйти пройти подтверждение заново');
+            $time = $user->phone_verified_token_expire - time();
+            \Yii::$app->session->setFlash('danger', 'Вы ввели неверный код подтверждыения<br>Если вам не пришло сообщение, то через ' . $time . ' секунд вы можете сгенерировать ещё один код');
         }
     }
 }

@@ -14,6 +14,7 @@ use yii\web\NotFoundHttpException;
 class ProfileController extends Controller
 {
     private $profileService;
+
     public function __construct($id, $module, EditProfileService $profileService, $config = [])
     {
         $this->profileService = $profileService;
@@ -81,9 +82,17 @@ class ProfileController extends Controller
 
     public function actionCode($id)
     {
-        $this->profileService->code(Yii::$app->user->identity->getId());
+        $model = $this->findModel($id);
 
-        return $this->render('code');
+        if ($model->phone_verified_token_expire == null || time() > $model->phone_verified_token_expire) {
+            $this->profileService->code(Yii::$app->user->identity->getId());
+
+            return $this->render('code');
+        } else {
+            $time = $model->phone_verified_token_expire - time();
+            Yii::$app->session->setFlash('danger', 'Новый код будет отправлен через ' . $time . ' секунд');
+            return $this->redirect(['cabinet/profile/index', 'id' => $id]);
+        }
     }
 
     public function actionPhoneVerified()
@@ -93,11 +102,10 @@ class ProfileController extends Controller
 
         $form = new VerifiedCodeForm();
 
-        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+//        echo var_dump($form);die();
 
-            $model->code = null;
-            $this->profileService->verifiedCode($form->code, Yii::$app->user->identity->getId());
-        }
+        $model->code = null;
+        $this->profileService->verifiedCode($form->code, Yii::$app->user->identity->getId());
 
         return $this->render('phoneVerified', [
             'model' => $form,

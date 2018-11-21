@@ -81,6 +81,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function clearCode()
     {
         $this->code = self::EMPTY_CODE;
+        $this->phone_verified_token = self::EMPTY_CODE;
+        $this->phone_verified_token = self::EMPTY_CODE;
     }
 
     public static function guestOrOther($id)
@@ -95,6 +97,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function generatePhoneVerifiedCode($code)
     {
         $this->code = $code;
+        if($this->code != null){
+            $this->phone_verified_token = time();
+            $this->phone_verified_token_expire = time() + 600;
+        }
     }
 
     //For admin generate user
