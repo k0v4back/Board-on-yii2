@@ -141,7 +141,12 @@ class ProfileController extends Controller
             $photo->name = Yii::$app->storage->saveUploadedFile($form->image);
             $photo->user_id = Yii::$app->user->identity->id;
             $photo->deleteAll(['user_id' => Yii::$app->user->identity->id]);
-            $photo->save(false);
+            if($photo->save(false)){
+                return [
+                    'success' => true,
+                    'pictureUri' => Yii::$app->storage->getFile($photo->name),
+                ];
+            }
         }
         return ['success' => false, 'errors' => $form->getErrors()];
     }

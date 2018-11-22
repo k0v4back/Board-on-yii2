@@ -6,56 +6,62 @@ use dosamigos\fileupload\FileUpload;
 
 <div class="row">
     <div class="col-lg-2 col-md-6 col-sm-6">
-        <img src="<?= $picture; ?>" alt="140x140" width="180" height="180" class="img-rounded"> <?php if($currentUser) { ?>
-            <div class="load">
+        <img src="<?= $picture; ?>" alt="140x140" width="180" id="profile-picture" height="180"
+             class="img-rounded"> <?php if ($currentUser) { ?>
             <?= FileUpload::widget([
                 'model' => $pictureUpload,
                 'attribute' => 'image',
                 'url' => ['cabinet/profile/picture'], // your url, this is just for demo purposes,
                 'options' => ['accept' => 'image/*'],
                 'clientOptions' => [
-                    'maxFileSize' => 2000000
+                    'maxFileSize' => 100000000
                 ],
                 // Also, you can specify jQuery-File-Upload events
                 // see: https://github.com/blueimp/jQuery-File-Upload/wiki/Options#processing-callback-options
                 'clientEvents' => [
                     'fileuploaddone' => 'function(e, data) {
-                                console.log(e);
-                                console.log(data);
-                            }',
-                    'fileuploadfail' => 'function(e, data) {
-                                console.log(e);
-                                console.log(data);
-                            }',
+                      if (data.result.success) {
+                          $("#profile-image-success").show();
+                          $("#profile-image-fail").hide();
+                          $("#profile-picture").attr("src", data.result.pictureUri);
+                        } else {
+                          $("#profile-image-fail").html(data.result.errors.picture).show();
+                          $("#profile-image-success").hide();
+                        }
+                      }',
                 ],
             ]); ?>
         <?php } ?>
-            </div>
+        <div class="alert alert-success display-none" id="profile-image-success">Фотография загружена.</div>
+        <div class="alert alert-danger display-none" id="profile-image-fail"> Возникла ошибка, фотография болжна быть определённого расширения и не больше 5 мегабайт </div>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-6 data-user">
         <p>Имя: <?= $model->username; ?></p>
         <p>Фамилия: <?= $model->last_name; ?></p>
         <?php
-        if($currentUser) {
+        if ($currentUser) {
             ?>
             <p>Телефон: <?= $model->phone; ?>
             <?php
             status($currentUser, $user, $model);
             ?>
-                <?php if($model->phone_verified == 1) : ?>
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true" title="Подтверждён" style="color: #06A006;"></span> </p>
-                <?php else : ?>
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true" title="Не подтверждён" style="color: #FF1E00;"></span> </p>
-                <?php endif; ?>
-            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/edit', 'id' => $model->id]) ?>" class="btn btn-default" style="margin-bottom: 10px">Редактировать профиль</a>
-            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/edit-phone', 'id' => $model->id]) ?>" class="btn btn-default">Редактировать телефон</a>
+            <?php if ($model->phone_verified == 1) : ?>
+                <span class="glyphicon glyphicon-ok" aria-hidden="true" title="Подтверждён"
+                      style="color: #06A006;"></span> </p>
+            <?php else : ?>
+                <span class="glyphicon glyphicon-remove" aria-hidden="true" title="Не подтверждён"
+                      style="color: #FF1E00;"></span> </p>
+            <?php endif; ?>
+            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/edit', 'id' => $model->id]) ?>" class="btn btn-default"
+               style="margin-bottom: 10px">Редактировать профиль</a>
+            <a href="<?= \yii\helpers\Url::to(['cabinet/profile/edit-phone', 'id' => $model->id]) ?>"
+               class="btn btn-default">Редактировать телефон</a>
             <?php
         }
         ?>
     </div>
 </div>
 <hr><br>
-
 
 
 <!-- Title -->
@@ -77,7 +83,8 @@ use dosamigos\fileupload\FileUpload;
                     <h3>Feature Label</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                     <p>
-                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
+                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More
+                            Info</a>
                     </p>
                 </div>
             </div>
@@ -90,7 +97,8 @@ use dosamigos\fileupload\FileUpload;
                     <h3>Feature Label</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                     <p>
-                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
+                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More
+                            Info</a>
                     </p>
                 </div>
             </div>
@@ -103,7 +111,8 @@ use dosamigos\fileupload\FileUpload;
                     <h3>Feature Label</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                     <p>
-                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
+                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More
+                            Info</a>
                     </p>
                 </div>
             </div>
@@ -116,7 +125,8 @@ use dosamigos\fileupload\FileUpload;
                     <h3>Feature Label</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                     <p>
-                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
+                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More
+                            Info</a>
                     </p>
                 </div>
             </div>
@@ -129,7 +139,8 @@ use dosamigos\fileupload\FileUpload;
                     <h3>Feature Label</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                     <p>
-                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
+                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More
+                            Info</a>
                     </p>
                 </div>
             </div>
@@ -142,7 +153,8 @@ use dosamigos\fileupload\FileUpload;
                     <h3>Feature Label</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                     <p>
-                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
+                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More
+                            Info</a>
                     </p>
                 </div>
             </div>
@@ -155,7 +167,8 @@ use dosamigos\fileupload\FileUpload;
                     <h3>Feature Label</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                     <p>
-                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
+                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More
+                            Info</a>
                     </p>
                 </div>
             </div>
@@ -168,7 +181,8 @@ use dosamigos\fileupload\FileUpload;
                     <h3>Feature Label</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                     <p>
-                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More Info</a>
+                        <a href="#" class="btn btn-primary">Buy Now!</a> <a href="#" class="btn btn-default">More
+                            Info</a>
                     </p>
                 </div>
             </div>
@@ -186,6 +200,10 @@ use dosamigos\fileupload\FileUpload;
 
     .data-user {
         margin-top: 10px;
+    }
+
+    .display-none {
+        display: none;
     }
 
 </style>
