@@ -2,6 +2,7 @@
 
 namespace frontend\controllers\cabinet;
 
+use board\entities\Avatar;
 use board\entities\User;
 use board\forms\profile\EditNameForm;
 use board\forms\profile\EditPhoneForm;
@@ -12,6 +13,7 @@ use board\services\users\EditProfileService;
 use yii\web\Controller;
 use Yii;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 use yii\web\UploadedFile;
 
 class ProfileController extends Controller
@@ -29,15 +31,16 @@ class ProfileController extends Controller
     public function actionIndex($id)
     {
         $model = $this->findModel($id);
-
         $currentUser = User::guestOrOther($id);
-
         $user = new User();
+
+        $picture = new UploadAvatarForm();
 
         return $this->render('index', [
             'model' => $model,
             'user' => $user,
             'currentUser' => $currentUser,
+            'picture' => $picture
         ]);
     }
 
@@ -121,18 +124,20 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function actionUpload()
+    public function actionPicture()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $form = new UploadAvatarForm();
-        if(Yii::$app->request->isPost){
-            $form->image = UploadedFile::getInstance($form, 'image');
-            if($this->avatarService->upload($form)){
-                echo 'Загрузка успешно завершена!';die();
-            }else{
-                echo 'Возникли опроблемы при загрузки картинки!';die();
+        $form->image = UploadedFile::getInstance($form, 'image');
+        if($form->validate()){
+            $photo = new Avatar();
+            $photo->name = Yii::$app->storage->saveUploadedFile($form->image);
+            $photo->user_id = Yii::$app->user->identity->id;
+            if($photo->save(false)) {
+
             }
         }
-        return $this->render('upload', ['model' => $form]);
+        return ['success' => false, 'errors' => $form->getErrors()];
     }
 
     protected function findModel($id)

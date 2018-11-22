@@ -14,4 +14,9 @@ class AvatarService
             return false;
         }
     }
+
+    public function save()
+    {
+        return 1;
+    }
 }

@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
+    'language' => 'RU-ru',
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
@@ -15,6 +16,9 @@ return [
     ],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+        'storage' => [
+            'class' => 'frontend\components\Storage',
+        ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
             'cookieValidationKey' => $params['cookieValidationKey'],
