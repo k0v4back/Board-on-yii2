@@ -1,6 +1,7 @@
 <?php
 
 use dosamigos\fileupload\FileUpload;
+use yii\helpers\Url;
 
 ?>
 
@@ -59,6 +60,9 @@ use dosamigos\fileupload\FileUpload;
             <?php
         }
         ?>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-6">
+        <a href="<?= Url::to(['advert/advert/create']) ?>" class="btn btn-primary">Создать объявление</a>
     </div>
 </div>
 <hr><br>

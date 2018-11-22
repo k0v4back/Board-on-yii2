@@ -2,8 +2,7 @@
 
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
-
-//var_dump($model);die();
+use board\helpers\ListHelper;
 
 ?>
 
@@ -12,17 +11,18 @@ use yii\helpers\Html;
     <div class="col-lg-6">
         <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'category_id') ?>
+        <?= $form->field($model, 'title')->label('Заголовок объявления') ?>
 
-        <?= $form->field($model, 'title') ?>
+        <?= $form->field($model, 'price')->label('Цена') ?>
 
-        <?= $form->field($model, 'price') ?>
+        <?= $form->field($model, 'content')->label('Описание') ?>
 
-        <?= $form->field($model, 'content') ?>
+        <?= $form->field($model, 'address')->label('Адрес') ?>
 
-        <?= $form->field($model, 'address') ?>
+        <?= $form->field($model, 'region_id')->dropDownList(ListHelper::region())->label('Ваш регион') ?>
 
-        <?= $form->field($model, 'region_id') ?>
+        <?= $form->field($model, 'category_id')->dropDownList(ListHelper::category())->label('Категоря объявления') ?>
+
 
         <div class="form-group">
             <?= Html::submitButton('Создать', ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>

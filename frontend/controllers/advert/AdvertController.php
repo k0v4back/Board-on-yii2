@@ -28,19 +28,15 @@ class AdvertController extends Controller
 
         if($form->load(Yii::$app->request->post()) && $form->validate())
         {
-//            echo 'Валидация прошла';die();
             try{
                 $this->advertService->create($form);
                 Yii::$app->session->setFlash('success', 'Объявление успешно добавлено.');
+                return $this->redirect(['cabinet/profile/index', 'id' => $id]);
             } catch (\Exception $e) {
                 Yii::$app->errorHandler->logException($e);
                 Yii::$app->session->setFlash('danger', 'Ошибка ' . $e);
             }
-        } else {
-            echo 'Ошибка валидации';
-            var_dump($form->errors); die();
         }
-
         return $this->render('create', [
             'model' => $form,
         ]);
