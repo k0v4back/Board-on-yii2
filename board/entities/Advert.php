@@ -1,6 +1,7 @@
 <?php
 
 namespace board\entities;
+use phpDocumentor\Reflection\Types\Static_;
 use yii\db\ActiveRecord;
 
 /**
@@ -27,7 +28,41 @@ use yii\db\ActiveRecord;
  */
 class Advert extends ActiveRecord
 {
-    
+    const STATUS_DRAFT = 0;
+    const STATUS_MODERATION = 1;
+    const STATUS_ACTIVE = 2;
+    const STATUS_CLOSED = 3;
+
+    public function crete($user_id, $category_id, $title, $price, $content, $status, $updated_at, $published_at, $region_id = null, $address = null) : Advert
+    {
+        $advert = new static();
+        $advert->user_id = $user_id;
+        $advert->category_id = $category_id;
+        $advert->title = $title;
+        $advert->price = $price;
+        $advert->content = $content;
+        $advert->status = $status;
+        $advert->created_at = time();
+        $advert->updated_at = $updated_at;
+        $advert->published_at = $published_at;
+        $advert->expired_at = time() + (30 * 24 * 60 * 60); // 30 days
+        $advert->region_id = $region_id;
+        $advert->address = $address;
+        return $advert;
+    }
+
+    public function edit($category_id, $title, $price, $content, $region_id = null, $address = null)
+    {
+        $this->category_id = $category_id;
+        $this->title = $title;
+        $this->price = $price;
+        $this->content = $content;
+        $this->updated_at = time();
+        $this->region_id = $region_id;
+        $this->address = $address;
+    }
+
+
     public static function tableName()
     {
         return '{{%advert}}';
