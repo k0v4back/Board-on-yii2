@@ -5,19 +5,24 @@ namespace frontend\controllers\cabinet;
 use board\entities\User;
 use board\forms\profile\EditNameForm;
 use board\forms\profile\EditPhoneForm;
+use board\forms\profile\UploadAvatarForm;
 use board\forms\profile\VerifiedCodeForm;
+use board\services\users\avatar\AvatarService;
 use board\services\users\EditProfileService;
 use yii\web\Controller;
 use Yii;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 class ProfileController extends Controller
 {
     private $profileService;
+    private $avatarService;
 
-    public function __construct($id, $module, EditProfileService $profileService, $config = [])
+    public function __construct($id, $module, EditProfileService $profileService, AvatarService $avatarService, $config = [])
     {
         $this->profileService = $profileService;
+        $this->avatarService = $avatarService;
         parent::__construct($id, $module, $config);
     }
 
@@ -114,6 +119,20 @@ class ProfileController extends Controller
         return $this->render('phoneVerified', [
             'model' => $form,
         ]);
+    }
+
+    public function actionUpload()
+    {
+        $form = new UploadAvatarForm();
+        if(Yii::$app->request->isPost){
+            $form->image = UploadedFile::getInstance($form, 'image');
+            if($this->avatarService->upload($form)){
+                echo 'Загрузка успешно завершена!';die();
+            }else{
+                echo 'Возникли опроблемы при загрузки картинки!';die();
+            }
+        }
+        return $this->render('upload', ['model' => $form]);
     }
 
     protected function findModel($id)
