@@ -6,10 +6,10 @@ use dosamigos\fileupload\FileUpload;
 
 <div class="row">
     <div class="col-lg-2 col-md-6 col-sm-6">
-        <img src="http://placehold.it/180x180" alt="140x140" class="img-rounded"> <?php if($currentUser) { ?>
+        <img src="<?= $picture; ?>" alt="140x140" width="180" height="180" class="img-rounded"> <?php if($currentUser) { ?>
             <div class="load">
             <?= FileUpload::widget([
-                'model' => $picture,
+                'model' => $pictureUpload,
                 'attribute' => 'image',
                 'url' => ['cabinet/profile/picture'], // your url, this is just for demo purposes,
                 'options' => ['accept' => 'image/*'],

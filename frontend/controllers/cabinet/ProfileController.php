@@ -34,13 +34,20 @@ class ProfileController extends Controller
         $currentUser = User::guestOrOther($id);
         $user = new User();
 
-        $picture = new UploadAvatarForm();
+        $pictureUpload = new UploadAvatarForm();
+
+        if ($picture = Avatar::find()->where(['user_id' => $id])->one()) {
+            $data = Yii::$app->storage->getFile($picture->name);
+        } else {
+            $data = Yii::$app->params['storageUri'] . Yii::$app->params['defaultAva'];
+        }
 
         return $this->render('index', [
             'model' => $model,
             'user' => $user,
             'currentUser' => $currentUser,
-            'picture' => $picture
+            'pictureUpload' => $pictureUpload,
+            'picture' => $data,
         ]);
     }
 
@@ -129,13 +136,12 @@ class ProfileController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $form = new UploadAvatarForm();
         $form->image = UploadedFile::getInstance($form, 'image');
-        if($form->validate()){
+        if ($form->validate()) {
             $photo = new Avatar();
             $photo->name = Yii::$app->storage->saveUploadedFile($form->image);
             $photo->user_id = Yii::$app->user->identity->id;
-            if($photo->save(false)) {
-
-            }
+            $photo->deleteAll(['user_id' => Yii::$app->user->identity->id]);
+            $photo->save(false);
         }
         return ['success' => false, 'errors' => $form->getErrors()];
     }
