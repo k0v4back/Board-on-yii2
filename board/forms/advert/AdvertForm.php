@@ -9,10 +9,26 @@ use yii\base\Model;
 
 class AdvertForm extends Model
 {
+    public $id;
+    public $user_id;
+    public $category_id;
+    public $region_id;
+    public $title;
+    public $price;
+    public $address;
+    public $content;
+    public $status;
+    public $created_at;
+    public $updated_at;
+    public $published_at;
+    public $expired_at;
+    public $reject_reason;
+
     public function rules()
     {
         return [
-            [['user_id', 'category_id', 'title', 'price', 'content', 'status', 'created_at', 'updated_at', 'published_at', 'expired_at'], 'required'],
+//            [['user_id', 'category_id', 'title', 'price', 'content', 'status', 'created_at', 'updated_at', 'published_at', 'expired_at'], 'required'],
+            [['user_id', 'category_id', 'title', 'price', 'content'], 'required'],
             [['user_id', 'category_id', 'region_id', 'price', 'status', 'created_at', 'updated_at', 'published_at', 'expired_at'], 'integer'],
             [['content', 'reject_reason'], 'string'],
             [['title'], 'string', 'max' => 150],

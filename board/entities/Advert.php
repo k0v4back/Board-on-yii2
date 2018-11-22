@@ -33,7 +33,7 @@ class Advert extends ActiveRecord
     const STATUS_ACTIVE = 2;
     const STATUS_CLOSED = 3;
 
-    public function crete($user_id, $category_id, $title, $price, $content, $status, $updated_at, $published_at, $region_id = null, $address = null) : Advert
+    public static function crete($user_id, $category_id, $title, $price, $content, $address, $region_id = null, $updated_at = null, $published_at= null) : Advert
     {
         $advert = new static();
         $advert->user_id = $user_id;
@@ -41,7 +41,7 @@ class Advert extends ActiveRecord
         $advert->title = $title;
         $advert->price = $price;
         $advert->content = $content;
-        $advert->status = $status;
+        $advert->status = self::STATUS_DRAFT;
         $advert->created_at = time();
         $advert->updated_at = $updated_at;
         $advert->published_at = $published_at;

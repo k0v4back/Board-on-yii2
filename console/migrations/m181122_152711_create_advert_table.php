@@ -24,8 +24,8 @@ class m181122_152711_create_advert_table extends Migration
             'reject_reason' => $this->text(),
 
             'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
-            'published_at' => $this->integer()->notNull(),
+            'updated_at' => $this->integer(),
+            'published_at' => $this->integer(),
             'expired_at' => $this->integer()->notNull(),
         ]);
 
