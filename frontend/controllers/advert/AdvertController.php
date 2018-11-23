@@ -3,6 +3,7 @@
 namespace frontend\controllers\advert;
 
 use board\entities\Advert;
+use board\entities\Category;
 use board\entities\Photo;
 use board\forms\advert\AdvertForm;
 use board\forms\profile\UploadAvatarForm;
@@ -52,6 +53,18 @@ class AdvertController extends Controller
         return $this->render('create', [
             'model' => $form,
             'pictureUpload' => $pictureUpload,
+        ]);
+    }
+
+    public function actionShow($id)
+    {
+//        echo $id;die();
+
+
+        $advert = Advert::find()->where(['id' => $id])->all();
+
+        return $this->render('show', [
+            'advert' => $advert,
         ]);
     }
 
