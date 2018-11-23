@@ -66,18 +66,18 @@ class AdvertController extends Controller
         $pictureUpload = new UploadAvatarForm();
 
         if ($picture = Photo::find()->where(['advert_id' => $id])->all()) {
-            $data = array();
+            $data2 = array();
             foreach ($picture as $key => $photoName){
-                $data[] = Yii::$app->params['storageUri'] . $photoName->name;
+                $data2[] = $photoName;
             }
         } else {
-            $data = null;
+            $data2 = null;
         }
 
         return $this->render('addPhoto', [
             'model' => $form,
             'pictureUpload' => $pictureUpload,
-            'picture' => $data,
+            'data2' => $data2,
         ]);
     }
 
@@ -101,11 +101,16 @@ class AdvertController extends Controller
         return ['success' => false, 'errors' => $form->getErrors()];
     }
 
-    public function actionTest()
+    public function actionDelete($id)
     {
-        echo 'Test';
-        die();
-    }
+        if ($id) {
+            $model = Photo::findOne($id);
+            $model->delete();
+            Yii::$app->session->setFlash('success', 'Фото было удалено!');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        Yii::$app->session->setFlash('danger', 'Ошибка!');
+        return $this->redirect(Yii::$app->request->referrer);    }
 
     protected function findModel($id)
     {
