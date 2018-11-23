@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `advert`.
  */
-class m181122_152711_create_advert_table extends Migration
+class m181123_070704_create_advert_table extends Migration
 {
     public function safeUp()
     {
@@ -28,6 +28,8 @@ class m181122_152711_create_advert_table extends Migration
             'published_at' => $this->integer(),
             'expired_at' => $this->integer()->notNull(),
         ]);
+
+        $this->createIndex('index-advert-id', 'advert', 'id');
 
         $this->addForeignKey('advert_foreign_user', 'advert', 'user_id', 'user', 'id', 'CASCADE');
 

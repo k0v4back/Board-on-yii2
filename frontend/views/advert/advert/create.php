@@ -4,6 +4,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use board\helpers\ListHelper;
 use kartik\select2\Select2;
+use dosamigos\fileupload\FileUpload;
 
 ?>
 
@@ -40,6 +41,31 @@ use kartik\select2\Select2;
         ])->label('Категория объявления');
         ?>
 
+
+        <?= FileUpload::widget([
+            'model' => $pictureUpload,
+            'attribute' => 'image',
+            'url' => ['advert/advert/picture'],
+            'options' => ['accept' => 'image/*'],
+            'clientOptions' => [
+                'maxFileSize' => 100000000
+            ],
+            'clientEvents' => [
+                'fileuploaddone' => 'function(e, data) {
+                      if (data.result.success) {
+                          $("#profile-image-success").show();
+                          $("#profile-image-fail").hide();
+                          $("#profile-picture").attr("src", data.result.pictureUri);
+                        } else {
+                          $("#profile-image-fail").html(data.result.errors.picture).show();
+                          $("#profile-image-success").hide();
+                        }
+                      }',
+            ],
+        ]); ?>
+
+        <div class="alert alert-success display-none" id="profile-image-success">Фотография загружена.</div>
+        <div class="alert alert-danger display-none" id="profile-image-fail"> Возникла ошибка, фотография болжна быть определённого расширения и не больше 5 мегабайт </div>
 
         <div class="form-group">
             <?= Html::submitButton('Создать', ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>

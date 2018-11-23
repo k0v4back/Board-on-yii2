@@ -3,11 +3,16 @@
 namespace frontend\controllers\advert;
 
 use board\entities\Advert;
+use board\entities\Avatar;
+use board\entities\Photo;
 use board\forms\advert\AdvertForm;
+use board\forms\profile\UploadAvatarForm;
 use board\services\advert\AdvertService;
 use yii\web\Controller;
 use Yii;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
+use yii\web\UploadedFile;
 
 class AdvertController extends Controller
 {
@@ -26,6 +31,14 @@ class AdvertController extends Controller
         $form = new AdvertForm();
         $form->user_id = $id;
 
+        $pictureUpload = new UploadAvatarForm();
+
+        if ($picture = Avatar::find()->where(['user_id' => $id])->one()) {
+            $data = Yii::$app->storage->getFile($picture->name);
+        } else {
+            $data = Yii::$app->params['storageUri'] . Yii::$app->params['defaultAva'];
+        }
+
         if($form->load(Yii::$app->request->post()) && $form->validate())
         {
             try{
@@ -39,7 +52,29 @@ class AdvertController extends Controller
         }
         return $this->render('create', [
             'model' => $form,
+            'pictureUpload' => $pictureUpload,
+            'picture' => $data,
         ]);
+    }
+
+    public function actionPicture()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $form = new UploadAvatarForm();
+        $form->image = UploadedFile::getInstance($form, 'image');
+        if ($form->validate()) {
+            $photo = new Photo();
+            $photo->name = Yii::$app->storage->saveUploadedFile($form->image);
+            $photo->advert_id = 4;
+            $photo->created_at = time();
+            if($photo->save(false)){
+                return [
+                    'success' => true,
+                    'pictureUri' => Yii::$app->storage->getFile($photo->name),
+                ];
+            }
+        }
+        return ['success' => false, 'errors' => $form->getErrors()];
     }
 
     public function actionTest()
