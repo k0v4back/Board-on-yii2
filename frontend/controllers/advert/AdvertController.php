@@ -103,13 +103,16 @@ class AdvertController extends Controller
 
     public function actionDelete($id)
     {
-        if ($id) {
-            $model = Photo::findOne($id);
+        $model = Photo::findOne($id);
+        $advert_id = $model->advert_id;
+        $advert = Advert::findOne($advert_id);
+
+        if (Yii::$app->user->identity->getId() == $advert->user_id) {
             $model->delete();
             Yii::$app->session->setFlash('success', 'Фото было удалено!');
             return $this->redirect(Yii::$app->request->referrer);
         }
-        Yii::$app->session->setFlash('danger', 'Ошибка!');
+        Yii::$app->session->setFlash('danger', 'Ошибка! Не стоит пытаться удалять чужие фото :)');
         return $this->redirect(Yii::$app->request->referrer);    }
 
     protected function findModel($id)
