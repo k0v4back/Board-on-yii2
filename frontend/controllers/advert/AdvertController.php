@@ -29,8 +29,8 @@ class AdvertController extends Controller
         if($form->load(Yii::$app->request->post()) && $form->validate())
         {
             try{
-                $this->advertService->create($form);
-                Yii::$app->session->setFlash('success', 'Объявление успешно добавлено.');
+                $result = $this->advertService->create($form);
+                Yii::$app->session->setFlash('success', 'Объявление \'' . $result->title . '\' успешно добавлено.');
                 return $this->redirect(['cabinet/profile/index', 'id' => $id]);
             } catch (\Exception $e) {
                 Yii::$app->errorHandler->logException($e);
