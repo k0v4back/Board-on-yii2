@@ -3,6 +3,7 @@
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use board\helpers\ListHelper;
+use kartik\select2\Select2;
 
 ?>
 
@@ -19,9 +20,25 @@ use board\helpers\ListHelper;
 
         <?= $form->field($model, 'address')->label('Адрес') ?>
 
-        <?= $form->field($model, 'region_id')->dropDownList(ListHelper::region())->label('Ваш регион') ?>
+        <?= $form->field($model, 'region_id')->widget(Select2::class, [
+            'data' => ListHelper::region(),
+            'language' => 'ru',
+            'options' => ['placeholder' => 'Введите регион'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ])->label('Ваш регион');
+        ?>
 
-        <?= $form->field($model, 'category_id')->dropDownList(ListHelper::category())->label('Категоря объявления') ?>
+        <?= $form->field($model, 'category_id')->widget(Select2::class, [
+            'data' => ListHelper::category(),
+            'language' => 'ru',
+            'options' => ['placeholder' => 'Введите категорию'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ])->label('Категория объявления');
+        ?>
 
 
         <div class="form-group">

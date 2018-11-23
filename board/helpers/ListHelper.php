@@ -17,14 +17,14 @@ class ListHelper
 
     public static function category()
     {
-        return ArrayHelper::map(Category::find()->asArray()->all(), 'id', function (array $category) {
+        return ArrayHelper::map(Category::find()->orderBy(['name' => SORT_ASC])->asArray()->all(), 'id', function (array $category) {
             return $category['name'];
         });
     }
 
     public static function region()
     {
-        return ArrayHelper::map(Regions::find()->asArray()->all(), 'id', function (array $region) {
+        return ArrayHelper::map(Regions::find()->orderBy(['name' => SORT_ASC])->asArray()->all(), 'id', function (array $region) {
             return $region['name'];
         });
     }
