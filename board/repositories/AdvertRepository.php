@@ -3,6 +3,7 @@
 namespace board\repositories;
 
 use board\entities\Advert;
+use board\entities\Regions;
 use DomainException;
 
 class AdvertRepository
@@ -26,6 +27,18 @@ class AdvertRepository
     {
         if (!$advert->delete()) {
             throw new \RuntimeException('Ошибка удаления объявления.');
+        }
+    }
+
+    public function getParentId($id)
+    {
+        static $new_mas = array();
+        foreach (Regions::find()->where(['id' => $id])->all() as $key => $litle3){
+            if($litle3->parent_id){
+                $new_mas[] = $litle3->parent_id;
+                $this->getParentId($litle3->parent_id);
+            }
+            return $new_mas;
         }
     }
 }

@@ -31,7 +31,7 @@ class ListHelper
 
     public static function city()
     {
-        return ArrayHelper::map(Regions::find()->where(['parent_id' => !null])->orderBy(['name' => SORT_ASC])->asArray()->all(), 'id', function (array $region) {
+        return ArrayHelper::map(Regions::find()->where(['>', 'parent_id', 0])->orderBy(['name' => SORT_ASC])->asArray()->all(), 'id', function (array $region) {
             return $region['name'];
         });
     }

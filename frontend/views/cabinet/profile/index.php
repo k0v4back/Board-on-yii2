@@ -61,7 +61,12 @@ use yii\helpers\Url;
         ?>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-6">
-        <a href="<?= Url::to(['advert/advert/create', 'id' => $lastId->id + 1]) ?>" class="btn btn-primary">Создать объявление</a>
+        <?php if($lastId) : ?>
+            <a href="<?= Url::to(['advert/advert/create', 'id' => $lastId->id + 1]) ?>" class="btn btn-primary">Создать объявление</a>
+        <?php endif; ?>
+        <?php if(!$lastId) : ?>
+            <a href="<?= Url::to(['advert/advert/create', 'id' => 1]) ?>" class="btn btn-primary">Создать объявление</a>
+        <?php endif; ?>
     </div>
 </div>
 <hr><br>

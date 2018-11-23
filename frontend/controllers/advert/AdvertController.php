@@ -3,10 +3,11 @@
 namespace frontend\controllers\advert;
 
 use board\entities\Advert;
-use board\entities\Category;
 use board\entities\Photo;
+use board\entities\Regions;
 use board\forms\advert\AdvertForm;
 use board\forms\profile\UploadAvatarForm;
+use board\repositories\AdvertRepository;
 use board\services\advert\AdvertService;
 use frontend\behaviors\AccessBehavior;
 use yii\web\Controller;
@@ -25,10 +26,12 @@ class AdvertController extends Controller
     }
 
     private $advertService;
+    private $advertRepo;
 
-    public function __construct($id, $module, AdvertService $advertService, array $config = [])
+    public function __construct($id, $module, AdvertService $advertService, AdvertRepository $advertRepo, array $config = [])
     {
         $this->advertService = $advertService;
+        $this->advertRepo = $advertRepo;
         parent::__construct($id, $module, $config);
     }
 
@@ -58,13 +61,14 @@ class AdvertController extends Controller
 
     public function actionShow($id)
     {
-//        echo $id;die();
-
 
         $advert = Advert::find()->where(['id' => $id])->all();
 
+        $breadcrumbs = $this->advertRepo->getParentId($advert[0]['city']);
+
         return $this->render('show', [
             'advert' => $advert,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
 
