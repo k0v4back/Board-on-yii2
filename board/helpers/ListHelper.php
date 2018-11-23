@@ -24,7 +24,14 @@ class ListHelper
 
     public static function region()
     {
-        return ArrayHelper::map(Regions::find()->orderBy(['name' => SORT_ASC])->asArray()->all(), 'id', function (array $region) {
+        return ArrayHelper::map(Regions::find()->where(['parent_id' => null])->orderBy(['name' => SORT_ASC])->asArray()->all(), 'id', function (array $region) {
+            return $region['name'];
+        });
+    }
+
+    public static function city()
+    {
+        return ArrayHelper::map(Regions::find()->where(['parent_id' => !null])->orderBy(['name' => SORT_ASC])->asArray()->all(), 'id', function (array $region) {
             return $region['name'];
         });
     }

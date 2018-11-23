@@ -21,6 +21,7 @@ use yii\db\ActiveRecord;
  * @property int $updated_at
  * @property int $published_at
  * @property int $expired_at
+ * @property int $city
  *
  * @property Category $category
  * @property Regions $region
@@ -33,7 +34,26 @@ class Advert extends ActiveRecord
     const STATUS_ACTIVE = 2;
     const STATUS_CLOSED = 3;
 
-    public static function crete($user_id, $category_id, $title, $price, $content, $address, $region_id = null, $updated_at = null, $published_at= null) : Advert
+//    public static function crete($user_id, $category_id, $title, $price, $content, $address, $region_id, $city, $updated_at = null, $published_at= null) : Advert
+//    {
+//        $advert = new static();
+//        $advert->user_id = $user_id;
+//        $advert->category_id = $category_id;
+//        $advert->title = $title;
+//        $advert->price = $price;
+//        $advert->content = $content;
+//        $advert->status = self::STATUS_DRAFT;
+//        $advert->created_at = time();
+//        $advert->updated_at = $updated_at;
+//        $advert->published_at = $published_at;
+//        $advert->expired_at = time() + (30 * 24 * 60 * 60); // 30 days
+//        $advert->region_id = $region_id;
+//        $advert->city = $city;
+//        $advert->address = $address;
+//        return $advert;
+//    }
+
+    public static function crete($user_id, $category_id, $title, $price, $content, $address, $region_id, $city, $updated_at = null, $published_at = null) : Advert
     {
         $advert = new static();
         $advert->user_id = $user_id;
@@ -41,13 +61,14 @@ class Advert extends ActiveRecord
         $advert->title = $title;
         $advert->price = $price;
         $advert->content = $content;
+        $advert->address = $address;
+        $advert->region_id = $region_id;
+        $advert->city = $city;
         $advert->status = self::STATUS_DRAFT;
         $advert->created_at = time();
         $advert->updated_at = $updated_at;
         $advert->published_at = $published_at;
         $advert->expired_at = time() + (30 * 24 * 60 * 60); // 30 days
-        $advert->region_id = $region_id;
-        $advert->address = $address;
         return $advert;
     }
 

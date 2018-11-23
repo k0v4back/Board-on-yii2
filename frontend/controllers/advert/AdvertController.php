@@ -3,12 +3,11 @@
 namespace frontend\controllers\advert;
 
 use board\entities\Advert;
-use board\entities\Avatar;
 use board\entities\Photo;
 use board\forms\advert\AdvertForm;
-use board\forms\photo\PhotoForm;
 use board\forms\profile\UploadAvatarForm;
 use board\services\advert\AdvertService;
+use frontend\behaviors\AccessBehavior;
 use yii\web\Controller;
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -17,6 +16,13 @@ use yii\web\UploadedFile;
 
 class AdvertController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            AccessBehavior::class,
+        ];
+    }
+
     private $advertService;
 
     public function __construct($id, $module, AdvertService $advertService, array $config = [])
@@ -34,7 +40,7 @@ class AdvertController extends Controller
 
         $pictureUpload = new UploadAvatarForm();
 
-        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+        if ($form->load(Yii::$app->request->post())) {
             try {
                 $this->advertService->create($form);
                 return $this->redirect(['advert/advert/add-photo', 'id' => $id]);

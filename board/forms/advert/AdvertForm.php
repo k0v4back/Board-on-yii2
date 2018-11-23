@@ -19,6 +19,7 @@ class AdvertForm extends Model
     public $content;
     public $status;
     public $created_at;
+    public $city;
     public $updated_at;
     public $published_at;
     public $expired_at;
@@ -28,9 +29,9 @@ class AdvertForm extends Model
     {
         return [
 //            [['user_id', 'category_id', 'title', 'price', 'content', 'status', 'created_at', 'updated_at', 'published_at', 'expired_at'], 'required'],
-            [['user_id', 'category_id', 'title', 'price', 'content'], 'required'],
+            [['user_id', 'category_id', 'title', 'price', 'content', 'region', 'city'], 'required'],
             [['user_id', 'category_id', 'region_id', 'price', 'status', 'created_at', 'updated_at', 'published_at', 'expired_at'], 'integer'],
-            [['content', 'reject_reason'], 'string'],
+            [['content', 'reject_reason', 'city'], 'string'],
             [['title'], 'string', 'max' => 150],
             [['address'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
@@ -56,6 +57,7 @@ class AdvertForm extends Model
             'updated_at' => 'Updated At',
             'published_at' => 'Published At',
             'expired_at' => 'Expired At',
+            'city' => 'City',
         ];
     }
 }

@@ -6,7 +6,6 @@ use board\entities\Advert;
 use board\entities\Photo;
 use board\forms\advert\AdvertForm;
 use board\forms\photo\PhotoForm;
-use board\forms\profile\UploadAvatarForm;
 use board\repositories\AdvertRepository;
 use board\repositories\PhotoRepository;
 
@@ -31,6 +30,7 @@ class AdvertService
             $form->content,
             $form->address,
             $form->region_id,
+            $form->city,
             $form->reject_reason
         );
         $this->repositoryAdvert->save($advert);

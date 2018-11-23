@@ -2,8 +2,6 @@
 
 use dosamigos\fileupload\FileUpload;
 
-//var_dump(count($picture));die();
-
 ?>
 
 <h4>Загрузка фотографий</h4>
@@ -42,7 +40,7 @@ use dosamigos\fileupload\FileUpload;
     ],
 ]); ?><br><br>
 
-<div class="alert alert-success display-none" id="profile-image-success">Фотография загружена.</div>
+<div class="alert alert-success display-none" id="profile-image-success">Фотография загружена. Чтобы её увидеть нажмите <b><a href="<?= \yii\helpers\Url::to(['/advert/advert/add-photo', 'id' => $_GET['id']]) ?>">сюда</a></b></div>
 <div class="alert alert-danger display-none" id="profile-image-fail"> Возникла ошибка, фотография болжна быть определённого расширения и не больше 2 мегабайт </div>
 
 <?php if($picture) : ?>

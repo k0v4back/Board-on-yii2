@@ -27,7 +27,17 @@ use kartik\select2\Select2;
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ])->label('Ваш регион');
+        ])->label('Регион');
+        ?>
+
+        <?= $form->field($model, 'city')->widget(Select2::class, [
+            'data' => ListHelper::city(),
+            'language' => 'ru',
+            'options' => ['placeholder' => 'Введите регион'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ])->label('Город');
         ?>
 
         <?= $form->field($model, 'category_id')->widget(Select2::class, [
