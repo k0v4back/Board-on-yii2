@@ -2,6 +2,7 @@
 
 namespace frontend\controllers\cabinet;
 
+use board\entities\Advert;
 use board\entities\Avatar;
 use board\entities\User;
 use board\forms\profile\EditNameForm;
@@ -34,6 +35,8 @@ class ProfileController extends Controller
         $currentUser = User::guestOrOther($id);
         $user = new User();
 
+        $lastId = Advert::find()->orderBy(['id' => SORT_DESC])->limit(1)->one();
+
         $pictureUpload = new UploadAvatarForm();
 
         if ($picture = Avatar::find()->where(['user_id' => $id])->one()) {
@@ -48,6 +51,7 @@ class ProfileController extends Controller
             'currentUser' => $currentUser,
             'pictureUpload' => $pictureUpload,
             'picture' => $data,
+            'lastId' => $lastId,
         ]);
     }
 

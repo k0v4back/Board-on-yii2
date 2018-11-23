@@ -3,16 +3,22 @@
 namespace board\services\advert;
 
 use board\entities\Advert;
+use board\entities\Photo;
 use board\forms\advert\AdvertForm;
+use board\forms\photo\PhotoForm;
+use board\forms\profile\UploadAvatarForm;
 use board\repositories\AdvertRepository;
+use board\repositories\PhotoRepository;
 
 class AdvertService
 {
-    private $repository;
+    private $repositoryAdvert;
+    private $photoRepository;
 
-    public function __construct(AdvertRepository $repository)
+    public function __construct(AdvertRepository $repositoryAdvert, PhotoRepository $photoRepository)
     {
-        $this->repository = $repository;
+        $this->photoRepository = $photoRepository;
+        $this->repositoryAdvert = $repositoryAdvert;
     }
 
     public function create(AdvertForm $form)
@@ -27,7 +33,17 @@ class AdvertService
             $form->region_id,
             $form->reject_reason
         );
-        $this->repository->save($advert);
+        $this->repositoryAdvert->save($advert);
         return $advert;
+    }
+
+    public function uploadPhoto($advert_id, PhotoForm $form)
+    {
+        $photo = Photo::upload(
+            $advert_id,
+            $form->name
+            );
+        $this->photoRepository->save($photo);
+        return $photo;
     }
 }

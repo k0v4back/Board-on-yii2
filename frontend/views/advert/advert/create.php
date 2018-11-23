@@ -41,11 +41,10 @@ use dosamigos\fileupload\FileUpload;
         ])->label('Категория объявления');
         ?>
 
-
         <?= FileUpload::widget([
             'model' => $pictureUpload,
             'attribute' => 'image',
-            'url' => ['advert/advert/picture'],
+            'url' => ['advert/advert/picture', 'id' => $_GET['id']],
             'options' => ['accept' => 'image/*'],
             'clientOptions' => [
                 'maxFileSize' => 100000000

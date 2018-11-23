@@ -23,4 +23,13 @@ class Photo extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Advert::class, ['id' => 'advert_id']);
     }
+
+    public static function upload($advert_id, $name)
+    {
+        $photo = new static;
+        $photo->advert_id = $advert_id;
+        $photo->created_at = time();
+        $photo->name = $name;
+        return $photo;
+    }
 }
