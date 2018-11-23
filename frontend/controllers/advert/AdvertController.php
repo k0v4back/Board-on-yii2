@@ -2,13 +2,16 @@
 
 namespace frontend\controllers\advert;
 
+use board\entities\Advert;
 use board\entities\Avatar;
 use board\entities\Photo;
 use board\forms\advert\AdvertForm;
+use board\forms\photo\PhotoForm;
 use board\forms\profile\UploadAvatarForm;
 use board\services\advert\AdvertService;
 use yii\web\Controller;
 use Yii;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UploadedFile;
 
@@ -22,7 +25,7 @@ class AdvertController extends Controller
         parent::__construct($id, $module, $config);
     }
 
-    public function actionCreate()
+    public function actionCreate($id)
     {
         $user_id = Yii::$app->user->identity->id;
 
@@ -31,23 +34,41 @@ class AdvertController extends Controller
 
         $pictureUpload = new UploadAvatarForm();
 
-        if ($picture = Avatar::find()->where(['user_id' => $user_id])->one()) {
-            $data = Yii::$app->storage->getFile($picture->name);
-        } else {
-            $data = Yii::$app->params['storageUri'] . Yii::$app->params['defaultAva'];
-        }
-
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
-                $result = $this->advertService->create($form);
-                Yii::$app->session->setFlash('success', 'Объявление \'' . $result->title . '\' успешно добавлено.');
-                return $this->redirect(['cabinet/profile/index', 'id' => $user_id]);
+                $this->advertService->create($form);
+                return $this->redirect(['advert/advert/add-photo', 'id' => $id]);
             } catch (\Exception $e) {
                 Yii::$app->errorHandler->logException($e);
                 Yii::$app->session->setFlash('danger', 'Ошибка ' . $e);
             }
         }
         return $this->render('create', [
+            'model' => $form,
+            'pictureUpload' => $pictureUpload,
+        ]);
+    }
+
+
+    public function actionAddPhoto($id)
+    {
+        $user_id = Yii::$app->user->identity->id;
+
+        $form = new AdvertForm();
+        $form->user_id = $user_id;
+
+        $pictureUpload = new UploadAvatarForm();
+
+        if ($picture = Photo::find()->where(['advert_id' => $id])->all()) {
+            $data = array();
+            foreach ($picture as $key => $photoName){
+                $data[] = Yii::$app->params['storageUri'] . $photoName->name;
+            }
+        } else {
+            $data = null;
+        }
+
+        return $this->render('addPhoto', [
             'model' => $form,
             'pictureUpload' => $pictureUpload,
             'picture' => $data,
@@ -62,7 +83,7 @@ class AdvertController extends Controller
         if ($form->validate()) {
             $photo = new Photo();
             $photo->name = Yii::$app->storage->saveUploadedFile($form->image);
-            $photo->advert_id = $_GET['id'];
+            $photo->advert_id = $id;
             $photo->created_at = time();
             if($photo->save(false)){
                 return [
@@ -72,5 +93,19 @@ class AdvertController extends Controller
             }
         }
         return ['success' => false, 'errors' => $form->getErrors()];
+    }
+
+    public function actionTest()
+    {
+        echo 'Test';
+        die();
+    }
+
+    protected function findModel($id)
+    {
+        if (($advert = Advert::findOne($id)) !== null) {
+            return $advert;
+        }
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

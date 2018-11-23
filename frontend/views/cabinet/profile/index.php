@@ -7,8 +7,7 @@ use yii\helpers\Url;
 
 <div class="row">
     <div class="col-lg-2 col-md-6 col-sm-6">
-        <img src="<?= $picture; ?>" alt="140x140" width="180" id="profile-picture" height="180"
-             class="img-rounded"> <?php if ($currentUser) { ?>
+        <img src="<?= $picture; ?>" width="180" id="profile-picture" height="180" class="img-rounded"> <?php if ($currentUser) { ?>
             <?= FileUpload::widget([
                 'model' => $pictureUpload,
                 'attribute' => 'image',
