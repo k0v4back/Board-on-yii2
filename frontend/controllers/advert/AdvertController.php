@@ -3,8 +3,10 @@
 namespace frontend\controllers\advert;
 
 use board\entities\Advert;
+use board\entities\Avatar;
 use board\entities\Photo;
 use board\entities\Regions;
+use board\entities\User;
 use board\forms\advert\AdvertForm;
 use board\forms\profile\UploadAvatarForm;
 use board\repositories\AdvertRepository;
@@ -63,13 +65,24 @@ class AdvertController extends Controller
     {
 
         $advert = Advert::find()->where(['id' => $id])->all();
+        $advertCont = Advert::find()->all();
+        $user = User::find()->where(['id' => $advert[0]['user_id']])->limit(1)->one();
+        $avatar = Avatar::find()->where(['user_id' => $user->id])->limit(1)->one();
+        $photo = Photo::find()->where(['advert_id' => $advert[0]['id']])->all();
+        $region = Regions::find()->where(['id' => $advert[0]['region_id']])->limit(1)->one();
+        $city = Regions::find()->where(['id' => $advert[0]['city']])->limit(1)->one();
 
-//        $breadcrumbs = $this->advertRepo->getParentId($advert[0]['city']);
         $breadcrumbs = $this->advertService->getParentId($advert[0]['city']);
 
         return $this->render('show', [
             'advert' => $advert,
+            'advertCont' => $advertCont,
             'breadcrumbs' => $breadcrumbs,
+            'user' => $user,
+            'avatar' => $avatar,
+            'photos' => $photo,
+            'region' => $region,
+            'city' => $city,
         ]);
     }
 
