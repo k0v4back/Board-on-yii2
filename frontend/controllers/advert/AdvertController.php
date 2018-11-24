@@ -7,6 +7,7 @@ use board\entities\Avatar;
 use board\entities\Photo;
 use board\entities\Regions;
 use board\entities\User;
+use board\forms\advert\AdvertEditForm;
 use board\forms\advert\AdvertForm;
 use board\forms\profile\UploadAvatarForm;
 use board\repositories\AdvertRepository;

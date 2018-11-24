@@ -4,6 +4,7 @@ namespace frontend\controllers\cabinet;
 
 use board\entities\Advert;
 use board\entities\Avatar;
+use board\entities\Photo;
 use board\entities\User;
 use board\forms\profile\EditNameForm;
 use board\forms\profile\EditPhoneForm;
@@ -35,6 +36,9 @@ class ProfileController extends Controller
         $currentUser = User::guestOrOther($id);
         $user = new User();
 
+        $advert = Advert::find()->where(['user_id' => $id])->all();
+        $photo = Photo::find()->where(['advert_id' => $advert[0]['id']])->limit(1)->one();
+
         $lastId = Advert::find()->orderBy(['id' => SORT_DESC])->limit(1)->one();
 
         $pictureUpload = new UploadAvatarForm();
@@ -52,6 +56,8 @@ class ProfileController extends Controller
             'pictureUpload' => $pictureUpload,
             'picture' => $data,
             'lastId' => $lastId,
+            'adverts' => $advert,
+            'photo' => $photo,
         ]);
     }
 

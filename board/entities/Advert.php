@@ -52,15 +52,16 @@ class Advert extends ActiveRecord
         return $advert;
     }
 
-    public function edit($category_id, $title, $price, $content, $region_id = null, $address = null)
+    public function edit($category_id, $region_id, $city, $address, $title, $price, $content, $updated_at = null)
     {
         $this->category_id = $category_id;
+        $this->region_id = $region_id;
+        $this->city = $city;
+        $this->address = $address;
         $this->title = $title;
         $this->price = $price;
         $this->content = $content;
         $this->updated_at = time();
-        $this->region_id = $region_id;
-        $this->address = $address;
     }
 
 

@@ -58,7 +58,7 @@ if(Yii::$app->user->getId() == $user->id){
 ?>
 
 
-<a href="#" class="btn btn-primary">Редактировать</a>
+<a href="<?= \yii\helpers\Url::to(['advert/advert/edit', 'id' => $advert[0]['id']]) ?>" class="btn btn-primary">Редактировать</a>
 <a href="<?= \yii\helpers\Url::to(['advert/advert/add-photo', 'id' => $advert[0]['id']]) ?>" class="btn btn-primary">Фотографии</a>
 <a href="<?= \yii\helpers\Url::to(['advert/advert/public', 'id' => $advert[0]['id']]) ?>" class="btn btn-success">Опубликовать</a>
 <a href="<?= \yii\helpers\Url::to(['advert/advert/close', 'id' => $advert[0]['id']]) ?>" class="btn btn-warning">Закрыть</a>

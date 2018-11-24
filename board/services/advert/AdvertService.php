@@ -5,6 +5,7 @@ namespace board\services\advert;
 use board\entities\Advert;
 use board\entities\Photo;
 use board\entities\Regions;
+use board\forms\advert\AdvertEditForm;
 use board\forms\advert\AdvertForm;
 use board\forms\photo\PhotoForm;
 use board\repositories\AdvertRepository;
@@ -36,6 +37,22 @@ class AdvertService
         );
         $this->repositoryAdvert->save($advert);
         return $advert;
+    }
+
+    public function edit($id, AdvertEditForm $form) : void
+    {
+        $advert = $this->repositoryAdvert->get($id);
+        $advert->edit(
+//            $form->category_id,
+//            $form->region_id,
+//            $form->city,
+//            $form->address,
+//            $form->title,
+//            $form->price,
+            $form->content
+//            $form->updated_at
+        );
+        $this->repositoryAdvert->save($advert);
     }
 
     public function uploadPhoto($advert_id, PhotoForm $form)
