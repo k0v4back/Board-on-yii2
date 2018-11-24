@@ -144,7 +144,38 @@ class AdvertController extends Controller
             return $this->redirect(Yii::$app->request->referrer);
         }
         Yii::$app->session->setFlash('danger', 'Ошибка! Не стоит пытаться удалять чужие фото :)');
-        return $this->redirect(Yii::$app->request->referrer);    }
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+
+    public function actionDeleteAdvert($id)
+    {
+        $model = Advert::findOne($id);
+        if (Yii::$app->user->identity->getId() == $model->user_id) {
+            $model->delete();
+            Yii::$app->session->setFlash('success', 'Объявление удалено!');
+            return $this->redirect(['cabinet/profile/index', 'id' => $model->user_id]);
+        }
+        Yii::$app->session->setFlash('danger', 'Ошибка! Не стоит пытаться удалять чужие объявления :)');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionPublic($id)
+    {
+        $model = Advert::findOne($id);
+        $model->status = 1;
+        $model->save();
+        return $this->redirect(['advert/advert/show', 'id' => $id]);
+    }
+
+    public function actionClose($id)
+    {
+        $model = Advert::findOne($id);
+        $model->status = 3;
+        $model->save();
+        return $this->redirect(['advert/advert/show', 'id' => $id]);
+    }
+
 
     protected function findModel($id)
     {

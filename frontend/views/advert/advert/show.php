@@ -10,17 +10,59 @@ foreach ($breadcrumbs as $value){
     $this->params['breadcrumbs'][] = ['label' => $region->name,'url' => ['category', 'id' => $region->id]];
 }
 
-//var_dump($photo);die();
-//var_dump($photo[0]['name']);die();
-//var_dump($region->name);
-//var_dump($city->name);
-//die();
 ?>
 
+<?php
+$status = $advert[0]['status'];
+if($status != 2 && Yii::$app->user->getId() != $user->id)
+{
+    Yii::$app->response->redirect('\site\index');
+}
+
+if(Yii::$app->user->getId() == $user->id){
+    switch ($status) {
+        case 0:
+            ?>
+            <div class="alert alert-danger alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                Ваше объявление теперь в черновике, если вы хотите его опубликовать, то нажмите на кнопку <strong>Опубликовать</strong> (только вы видети это сообщение).
+            </div>
+            <?php
+            break;
+        case 1:
+            ?>
+            <div class="alert alert-info alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                Ваше объявление проходит модерацию, <strong>скоро его проверят</strong> (только вы видети это сообщение).
+            </div>
+            <?php
+            break;
+        case 2:
+            ?>
+            <div class="alert alert-success alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                Ваше объявление <strong>активно</strong> (только вы видети это сообщение).
+            </div>
+            <?php
+            break;
+        case 3:
+            ?>
+            <div class="alert alert-warning alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                Ваше объявление закрыто (только вы видети это сообщение).
+            </div>
+            <?php
+            break;
+    }
+}
+?>
+
+
 <a href="#" class="btn btn-primary">Редактировать</a>
-<a href="#" class="btn btn-primary">Фотографии</a>
-<a href="#" class="btn btn-success">Опубликовать</a>
-<a href="#" class="btn btn-danger">Удалить</a>
+<a href="<?= \yii\helpers\Url::to(['advert/advert/add-photo', 'id' => $advert[0]['id']]) ?>" class="btn btn-primary">Фотографии</a>
+<a href="<?= \yii\helpers\Url::to(['advert/advert/public', 'id' => $advert[0]['id']]) ?>" class="btn btn-success">Опубликовать</a>
+<a href="<?= \yii\helpers\Url::to(['advert/advert/close', 'id' => $advert[0]['id']]) ?>" class="btn btn-warning">Закрыть</a>
+<a href="<?= \yii\helpers\Url::to(['advert/advert/delete-advert', 'id' => $advert[0]['id']]) ?>" class="btn btn-danger">Удалить</a>
 <br>
 <br>
 
