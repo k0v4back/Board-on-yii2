@@ -4,6 +4,7 @@ namespace board\services\advert;
 
 use board\entities\Advert;
 use board\entities\Photo;
+use board\entities\Regions;
 use board\forms\advert\AdvertForm;
 use board\forms\photo\PhotoForm;
 use board\repositories\AdvertRepository;
@@ -45,5 +46,17 @@ class AdvertService
             );
         $this->photoRepository->save($photo);
         return $photo;
+    }
+
+    public function getParentId($id)
+    {
+        static $new_mas = array();
+        foreach (Regions::find()->where(['id' => $id])->all() as $key => $litle3){
+            if($litle3->parent_id){
+                $new_mas[] = $litle3->parent_id;
+                $this->getParentId($litle3->parent_id);
+            }
+            return $new_mas;
+        }
     }
 }

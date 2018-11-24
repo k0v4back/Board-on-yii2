@@ -64,7 +64,8 @@ class AdvertController extends Controller
 
         $advert = Advert::find()->where(['id' => $id])->all();
 
-        $breadcrumbs = $this->advertRepo->getParentId($advert[0]['city']);
+//        $breadcrumbs = $this->advertRepo->getParentId($advert[0]['city']);
+        $breadcrumbs = $this->advertService->getParentId($advert[0]['city']);
 
         return $this->render('show', [
             'advert' => $advert,
