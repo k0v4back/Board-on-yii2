@@ -2,6 +2,8 @@
 
 namespace common\bootstrap;
 
+use Elasticsearch\Client;
+use Elasticsearch\ClientBuilder;
 use board\services\users\PasswordResetRequestService;
 use board\services\users\SmsRuService;
 use yii\base\BootstrapInterface;
@@ -25,6 +27,10 @@ class SetUp implements BootstrapInterface
 
         $container->setSingleton(MailerInterface::class, function () use ($app) {
             return $app->mailer;
+        });
+
+        $container->setSingleton(Client::class, function () {
+            return ClientBuilder::create()->build();
         });
 
 
