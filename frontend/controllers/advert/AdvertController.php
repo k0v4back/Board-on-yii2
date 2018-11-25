@@ -111,6 +111,10 @@ class AdvertController extends Controller
 
     public function actionAdd($id)
     {
+        if(Yii::$app->user->isGuest)
+        {
+            $this->redirect(['site/index']);
+        }
         $model = $this->findModel($id);
         $currentUser = Yii::$app->user->identity->id;
 
@@ -121,6 +125,10 @@ class AdvertController extends Controller
 
     public function actionDel($id)
     {
+        if(Yii::$app->user->isGuest)
+        {
+            $this->redirect(['site/index']);
+        }
         $model = $this->findModel($id);
         $currentUser = Yii::$app->user->identity->id;
 

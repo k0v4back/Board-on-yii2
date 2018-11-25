@@ -72,23 +72,37 @@ class Advert extends ActiveRecord
 
     public static function addFavorites($currentUser, Advert $advert)
     {
-        $redis = \Yii::$app->redis;
-        $redis->sadd("user:{$currentUser}:favoriteAdvert", $advert->id);
+        if(!\Yii::$app->user->isGuest)
+        {
+            $redis = \Yii::$app->redis;
+            $redis->sadd("user:{$currentUser}:favoriteAdvert", $advert->id);
+        }
+        \Yii::$app->response->redirect(['site/index']);
     }
 
     public static function deleteFavorites($currentUser, Advert $advert)
     {
-        $redis = \Yii::$app->redis;
-        $redis->srem("user:{$currentUser}:favoriteAdvert", $advert->id);
+        if(!\Yii::$app->user->isGuest)
+        {
+            $redis = \Yii::$app->redis;
+            $redis->srem("user:{$currentUser}:favoriteAdvert", $advert->id);
+        }
+        \Yii::$app->response->redirect(['site/index']);
+
     }
 
     public static function getFavorites()
     {
-        $redis = \Yii::$app->redis;
-        $currentUser = \Yii::$app->user->identity->id;
-        $key = "user:{$currentUser}:favoriteAdvert";
-        $ids = $redis->smembers($key);
-        return Advert::find()->where(['id' => $ids])->orderBy('title')->asArray()->all();
+        if(!\Yii::$app->user->isGuest)
+        {
+            $redis = \Yii::$app->redis;
+            $currentUser = \Yii::$app->user->identity->id;
+            $key = "user:{$currentUser}:favoriteAdvert";
+            $ids = $redis->smembers($key);
+            return Advert::find()->where(['id' => $ids])->orderBy('title')->asArray()->all();
+        }
+        return null;
+
     }
 
     public function getCategory()
