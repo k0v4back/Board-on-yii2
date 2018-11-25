@@ -104,9 +104,14 @@ if(Yii::$app->user->getId() == $user->id){
                         <span class="sr-only">Next</span>
                     </a>
                     <ol class="carousel-indicators">
+                        <?php if($photos) : ?>
                         <li data-target="#dws-slider" data-slide-to="0" class="active"></li>
-                        <li data-target="#dws-slider" data-slide-to="1"></li>
-                        <li data-target="#dws-slider" data-slide-to="2"></li>
+                            <?php if(count($photos) > 1) : ?>
+                                <?php for($i = 1; $i < count($photos); $i++) : ?>
+                                <li data-target="#dws-slider" data-slide-to="<?= $i ?>"></li>
+                                <?php endfor; ?>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     </ol>
                 </div>
             </div>
