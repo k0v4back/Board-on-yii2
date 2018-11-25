@@ -39,18 +39,17 @@ class AdvertService
         return $advert;
     }
 
-    public function edit($id, AdvertEditForm $form) : void
+    public function edit($id, AdvertEditForm $form)
     {
         $advert = $this->repositoryAdvert->get($id);
         $advert->edit(
-//            $form->category_id,
-//            $form->region_id,
-//            $form->city,
-//            $form->address,
-//            $form->title,
-//            $form->price,
+            $form->category_id,
+            $form->region_id,
+            $form->city,
+            $form->address,
+            $form->title,
+            $form->price,
             $form->content
-//            $form->updated_at
         );
         $this->repositoryAdvert->save($advert);
     }

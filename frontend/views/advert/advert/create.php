@@ -16,7 +16,10 @@ use kartik\select2\Select2;
 
         <?= $form->field($model, 'price')->label('Цена') ?>
 
-        <?= $form->field($model, 'content')->textarea()->label('Описание') ?>
+        <?= $form->field($model, 'content')->widget(\dosamigos\ckeditor\CKEditor::class, [
+            'options' => ['rows' => 6],
+            'preset' => 'basic'
+        ]) ?>
 
         <?= $form->field($model, 'address')->label('Адрес') ?>
 

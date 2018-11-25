@@ -62,6 +62,28 @@ class AdvertController extends Controller
         ]);
     }
 
+    public function actionEdit($id)
+    {
+        $model = $this->findModel($id);
+
+        $form = new AdvertEditForm($model);
+
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->advertService->edit($id, $form);
+                Yii::$app->session->setFlash('success', 'Ваши данные успешно отредактированы');
+                return $this->redirect(['advert/advert/show', 'id' => $id]);
+            } catch (\Exception $e) {
+                Yii::$app->session->setFlash('danger', 'Возникла ошибка при редактировании данных');
+                return $this->redirect(['advert/advert/show', 'id' => $id]);
+            }
+        }
+
+        return $this->render('advertEdit', [
+            'model' => $form,
+        ]);
+    }
+
     public function actionShow($id)
     {
 
