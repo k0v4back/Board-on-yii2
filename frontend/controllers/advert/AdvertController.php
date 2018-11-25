@@ -110,6 +110,7 @@ class AdvertController extends Controller
     }
 
 
+
     public function actionAddPhoto($id)
     {
         $user_id = Yii::$app->user->identity->id;

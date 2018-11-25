@@ -4,7 +4,7 @@ use dosamigos\fileupload\FileUpload;
 use yii\helpers\Url;
 
 
-
+//var_dump($advertClosed);die();
 ?>
 
 <div class="row">
@@ -77,7 +77,10 @@ use yii\helpers\Url;
 <!-- Title -->
 <div class="row">
     <div class="col-xs-12">
-        <h4>Активные объявления | Завершённые объвления</h4>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <button class="btn btn-default btn1">Активные объявления</button> | <button class="btn btn-default btn2">Не активные</button>
+        <br>
+        <br>
     </div>
 </div>
 
@@ -86,18 +89,38 @@ use yii\helpers\Url;
     <!-- Post Content Column -->
     <div class="col-lg-12">
 
-        <?php foreach ($adverts as $key => $advert) : ?>
-        <div class="col-md-3 hero-feature">
-            <div class="thumbnail">
-                <a href="<?= Url::to(['advert/advert/show', 'id' => $advert->id]) ?>"><img src="<?= Yii::$app->params['storageUri'] . $photo->name ?>" alt=""></a>
-                <div class="caption">
-                    <h3><a href="<?= Url::to(['advert/advert/show', 'id' => $advert->id]) ?>"><?= $advert->title ?></a></h3>
-                    <h4><?= $advert->price ?> ₽</h4>
-                    <p><?= $date = Yii::$app->formatter->asDatetime($advert->created_at, 'dd-m-Y');?></p>
+
+            <?php foreach ($adverts as $key => $advert) : ?>
+                <div class="col-md-3 hero-feature block_with_text1">
+                    <div class="thumbnail">
+                        <?php
+                            $photo = \board\entities\Photo::find()->where(['advert_id' => $advert->id])->one();
+                        ?>
+                        <a href="<?= Url::to(['advert/advert/show', 'id' => $advert->id]) ?>"><img src="<?= Yii::$app->params['storageUri'] . $photo->name ?>"></a>
+                        <div class="caption">
+                            <h3><a href="<?= Url::to(['advert/advert/show', 'id' => $advert->id]) ?>"><?= $advert->title ?></a></h3>
+                            <h4><?= $advert->price ?> ₽</h4>
+                            <p><?= $date = Yii::$app->formatter->asDatetime($advert->created_at, 'dd-m-Y');?></p>
+                            <a href="<?= Url::to(['advert/advert/show', 'id' => $advert->id]) ?>" class="btn btn-default">Смотреть подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php foreach ($advertClosed as $key => $advert) : ?>
+            <div class="col-md-3 hero-feature block_with_text2">
+                <div class="thumbnail">
+                    <?php
+                        $photo = \board\entities\Photo::find()->where(['advert_id' => $advert->id])->one();
+                    ?>
+                    <a href="<?= Url::to(['advert/advert/show', 'id' => $advert->id]) ?>"><img src="<?= Yii::$app->params['storageUri'] . $photo->name ?>"></a>
+                    <div class="caption">
+                        <h3><a href="<?= Url::to(['advert/advert/show', 'id' => $advert->id]) ?>"><?= $advert->title ?></a></h3>
+                        <h4><?= $advert->price ?> ₽</h4>
+                        <p><?= $date = Yii::$app->formatter->asDatetime($advert->created_at, 'dd-m-Y');?></p>
                         <a href="<?= Url::to(['advert/advert/show', 'id' => $advert->id]) ?>" class="btn btn-default">Смотреть подробнее</a>
+                    </div>
                 </div>
             </div>
-        </div>
         <?php endforeach; ?>
 
 
@@ -118,7 +141,23 @@ use yii\helpers\Url;
         display: none;
     }
 
+    .block_with_text2{
+        display: none;
+    }
+
+
+
 </style>
+<script>
+    $('.btn1').click(function(){
+        $(".block_with_text1").fadeToggle(100);
+        $('.block_with_text2').hide();
+    });
+    $('.btn2').click(function(){
+        $(".block_with_text2").fadeToggle(100);
+        $('.block_with_text1').hide();
+    });
+</script>
 
 <?php
 

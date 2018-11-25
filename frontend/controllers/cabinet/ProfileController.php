@@ -36,8 +36,9 @@ class ProfileController extends Controller
         $currentUser = User::guestOrOther($id);
         $user = new User();
 
-        $advert = Advert::find()->where(['user_id' => $id])->all();
-        $photo = Photo::find()->where(['advert_id' => $advert[0]['id']])->limit(1)->one();
+        $advert = Advert::find()->where(['user_id' => $id])->andWhere(['status' => Advert::STATUS_ACTIVE])->all();
+
+        $advertClosed = Advert::find()->where(['user_id' => $id])->andWhere(['!=', 'status', Advert::STATUS_ACTIVE])->all();
 
         $lastId = Advert::find()->orderBy(['id' => SORT_DESC])->limit(1)->one();
 
@@ -57,7 +58,7 @@ class ProfileController extends Controller
             'picture' => $data,
             'lastId' => $lastId,
             'adverts' => $advert,
-            'photo' => $photo,
+            'advertClosed' => $advertClosed,
         ]);
     }
 
