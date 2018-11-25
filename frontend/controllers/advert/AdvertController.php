@@ -109,6 +109,26 @@ class AdvertController extends Controller
         ]);
     }
 
+    public function actionAdd($id)
+    {
+        $model = $this->findModel($id);
+        $currentUser = Yii::$app->user->identity->id;
+
+        Advert::addFavorites($currentUser, $model);
+        Yii::$app->session->setFlash('success', "Объявление <b>$model->title</b> добавлено в избранное");
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionDel($id)
+    {
+        $model = $this->findModel($id);
+        $currentUser = Yii::$app->user->identity->id;
+
+        Advert::deleteFavorites($currentUser, $model);
+        Yii::$app->session->setFlash('success', "Объявление <b>$model->title</b> уделено из избранного");
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
 
 
     public function actionAddPhoto($id)

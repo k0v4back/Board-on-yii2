@@ -44,6 +44,9 @@ class ProfileController extends Controller
 
         $pictureUpload = new UploadAvatarForm();
 
+        $favorites = Advert::getFavorites();
+
+
         if ($picture = Avatar::find()->where(['user_id' => $id])->one()) {
             $data = Yii::$app->storage->getFile($picture->name);
         } else {
@@ -59,6 +62,7 @@ class ProfileController extends Controller
             'lastId' => $lastId,
             'adverts' => $advert,
             'advertClosed' => $advertClosed,
+            'favorites' => $favorites,
         ]);
     }
 

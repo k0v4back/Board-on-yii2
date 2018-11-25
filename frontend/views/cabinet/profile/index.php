@@ -4,8 +4,9 @@ use dosamigos\fileupload\FileUpload;
 use yii\helpers\Url;
 
 
-//var_dump($advertClosed);die();
+//var_dump(\board\entities\Advert::getFavorites());die();
 ?>
+
 
 <div class="row">
     <div class="col-lg-2 col-md-6 col-sm-6">
@@ -70,7 +71,40 @@ use yii\helpers\Url;
         <?php if(!$lastId) : ?>
             <a href="<?= Url::to(['advert/advert/create', 'id' => 1]) ?>" class="btn btn-primary">Создать объявление</a>
         <?php endif; ?>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+            Избранные
+        </button>
+
     </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Избранные объявления (<?= count($favorites) ?>)</h4>
+                    </div>
+                    <div class="modal-body">
+                        <?php foreach ($favorites as $key => $favorite) : ?>
+                        <div style="border: 1px solid black; border-radius: 5px; padding: 10px">
+                            <text style="font-size: 17px"><a href="<?= Url::to(['advert/advert/show', 'id' => $favorite['id']]) ?>"><?= $favorite['title'] ?></a>
+                                <a href="<?= Url::to(['advert/advert/del', 'id' => $favorite['id']]) ?>" style="float: right" title="Удалить из избранного">
+                                    <span class="glyphicon glyphicon-remove" style="color: red" aria-hidden="true"></span>
+                                </a><br>
+                                <?= $favorite['price'] ?> ₽ <br>
+                                <a href="<?= Url::to(['advert/advert/show', 'id' => $favorite['id']]) ?>" class="btn btn-default">Смотреть подробнее</a>
+
+                            </text>
+                        </div><br>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     <?php endif; ?>
 </div>
 <hr><br>

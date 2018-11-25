@@ -10,6 +10,7 @@ foreach ($breadcrumbs as $value){
     $this->params['breadcrumbs'][] = ['label' => $region->name,'url' => ['category', 'id' => $region->id]];
 }
 
+
 ?>
 
 <?php
@@ -74,7 +75,7 @@ if(Yii::$app->user->getId() == $user->id){
     <div class="col-lg-8">
         <div class="panel panel-default">
             <div class="panel-body">
-                <a href="#" title="Добавить в избранное">
+                <a href="<?= \yii\helpers\Url::to(['advert/advert/add', 'id' => $advert[0]['id']]) ?>" title="Добавить в избранное">
                     <i class="far fa-star fa-lg" style="float:right; margin:20px; size: 20px"></i>
                 </a>
                 <h3><?= $advert[0]['title'] ?></h3>

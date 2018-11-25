@@ -70,6 +70,27 @@ class Advert extends ActiveRecord
         return '{{%advert}}';
     }
 
+    public static function addFavorites($currentUser, Advert $advert)
+    {
+        $redis = \Yii::$app->redis;
+        $redis->sadd("user:{$currentUser}:favoriteAdvert", $advert->id);
+    }
+
+    public static function deleteFavorites($currentUser, Advert $advert)
+    {
+        $redis = \Yii::$app->redis;
+        $redis->srem("user:{$currentUser}:favoriteAdvert", $advert->id);
+    }
+
+    public static function getFavorites()
+    {
+        $redis = \Yii::$app->redis;
+        $currentUser = \Yii::$app->user->identity->id;
+        $key = "user:{$currentUser}:favoriteAdvert";
+        $ids = $redis->smembers($key);
+        return Advert::find()->where(['id' => $ids])->orderBy('title')->asArray()->all();
+    }
+
     public function getCategory()
     {
         return $this->hasOne(Category::class, ['id' => 'category_id']);
