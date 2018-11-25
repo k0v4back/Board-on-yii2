@@ -147,40 +147,26 @@ if(Yii::$app->user->getId() == $user->id){
 <script type='text/javascript'>
     ymaps.ready(init);
     function init(){
-        // var city = 'Калининград Дзержинского 44';
         var city = '<?= $point ?>';
         var geocoder = new ymaps.geocode(
-            // Строка с адресом, который нужно геокодировать
             city,
-            // 'Калининград Дзер    жинского 44',
-            // требуемое количество результатов
             { results: 1 }
         );
-        // После того, как поиск вернул результат, вызывается callback-функция
         geocoder.then(
             function (res) {
-                // координаты объекта
                 var coord = res.geoObjects.get(0).geometry.getCoordinates();
                 var map = new ymaps.Map('map', {
-                    // Центр карты - координаты первого элемента
                     center: coord,
-                    // Коэффициент масштабирования
                     zoom: 7,
-                    // включаем масштабирование карты колесом
                     behaviors: ['default', 'scrollZoom'],
                     controls: ['mapTools']
                 });
-                // Добавление метки на карту
                 map.geoObjects.add(res.geoObjects.get(0));
-                // устанавливаем максимально возможный коэффициент масштабирования - 1
                 map.zoomRange.get(coord).then(function(range){
                     map.setCenter(coord, range[1] - 1)
                 });
-                // Добавление стандартного набора кнопок
                 map.controls.add('mapTools')
-                // Добавление кнопки изменения масштаба
                     .add('zoomControl')
-                    // Добавление списка типов карты
                     .add('typeSelector');
             }
         );

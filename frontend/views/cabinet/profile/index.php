@@ -62,6 +62,7 @@ use yii\helpers\Url;
         }
         ?>
     </div>
+    <?php if(!Yii::$app->user->isGuest && Yii::$app->user->getId() == $model->id) : ?>
     <div class="col-lg-4 col-md-6 col-sm-6">
         <?php if($lastId) : ?>
             <a href="<?= Url::to(['advert/advert/create', 'id' => $lastId->id + 1]) ?>" class="btn btn-primary">Создать объявление</a>
@@ -70,6 +71,7 @@ use yii\helpers\Url;
             <a href="<?= Url::to(['advert/advert/create', 'id' => 1]) ?>" class="btn btn-primary">Создать объявление</a>
         <?php endif; ?>
     </div>
+    <?php endif; ?>
 </div>
 <hr><br>
 
@@ -89,9 +91,10 @@ use yii\helpers\Url;
     <!-- Post Content Column -->
     <div class="col-lg-12">
 
-
+        <div class="block_with_text1">
+            <h4>Активные объявления</h4>
             <?php foreach ($adverts as $key => $advert) : ?>
-                <div class="col-md-3 hero-feature block_with_text1">
+                <div class="col-md-3 hero-feature">
                     <div class="thumbnail">
                         <?php
                             $photo = \board\entities\Photo::find()->where(['advert_id' => $advert->id])->one();
@@ -106,8 +109,12 @@ use yii\helpers\Url;
                     </div>
                 </div>
             <?php endforeach; ?>
+        </div>
+
+        <div class="block_with_text2">
+        <h4>Не активные объявления</h4>
         <?php foreach ($advertClosed as $key => $advert) : ?>
-            <div class="col-md-3 hero-feature block_with_text2">
+            <div class="col-md-3 hero-feature">
                 <div class="thumbnail">
                     <?php
                         $photo = \board\entities\Photo::find()->where(['advert_id' => $advert->id])->one();
@@ -122,6 +129,7 @@ use yii\helpers\Url;
                 </div>
             </div>
         <?php endforeach; ?>
+        </div>
 
 
     </div>
@@ -196,19 +204,3 @@ function status($currentUser, $user, $model)
 }
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
