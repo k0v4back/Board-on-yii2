@@ -94,7 +94,7 @@ class AdvertController extends Controller
         $photo = Photo::find()->where(['advert_id' => $advert[0]['id']])->all();
         $region = Regions::find()->where(['id' => $advert[0]['region_id']])->limit(1)->one();
         $city = Regions::find()->where(['id' => $advert[0]['city']])->limit(1)->one();
-        $advertSimilar = Advert::find()->where(['category_id'=> $advert[0]['category_id']])->andWhere(['city' => $advert[0]['city']])->andWhere(['!=', 'id', $advert[0]['id']])->limit(3)->all();
+        $advertSimilar = Advert::find()->where(['category_id'=> $advert[0]['category_id']])->andWhere(['city' => $advert[0]['city']])->andWhere(['!=', 'id', $advert[0]['id']])->orderBy('RAND()')->limit(3)->all();
 
         $breadcrumbs = $this->advertService->getParentId($advert[0]['city']);
 

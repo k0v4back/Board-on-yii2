@@ -178,7 +178,31 @@ if(Yii::$app->user->getId() == $user->id){
         interval: false
     })
 </script>
-<br>
+
+
+    <br>
+    <a href="#" class="btn btn-success"><i class="fas fa-envelope"></i> Написать сообщение</a>
+    <a href="#" class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal"><i class="fas fa-phone"></i> Позвонить</a>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Номер владельца объявления</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>Номер телефона: <?= $user->phone ?></h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
 <br>
 
 
@@ -204,8 +228,8 @@ if(Yii::$app->user->getId() == $user->id){
                     ?>
                     <a href="<?= \yii\helpers\Url::to(['advert/advert/show', 'id' => $popular->id]) ?>"><img src="<?= Yii::$app->params['storageUri'] . $photo->name ?>"></a>
                     <div class="caption">
-                        <h3><?= $popular->title ?></h3>
-                        <a href="<?= \yii\helpers\Url::to(['advert/advert/show', 'id' => $popular->id]) ?>"><p><?= substr($popular->content, 0, 50).'...'  ?></p></a>
+                        <a href="<?= \yii\helpers\Url::to(['advert/advert/show', 'id' => $popular->id]) ?>"><h3><?= $popular->title ?></h3></a>
+                        <p><?= substr($popular->content, 0, 50).'...'  ?></p>
                         <p>
                             <a href="<?= \yii\helpers\Url::to(['advert/advert/show', 'id' => $popular->id]) ?>" class="btn btn-default">Смотреть подробнее</a>
 
@@ -220,22 +244,5 @@ if(Yii::$app->user->getId() == $user->id){
         </div>
 
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
