@@ -10,7 +10,7 @@ foreach ($breadcrumbs as $value){
     $this->params['breadcrumbs'][] = ['label' => $region->name,'url' => ['category', 'id' => $region->id]];
 }
 
-
+//var_dump($advertSimilar);die();
 ?>
 
 <?php
@@ -178,12 +178,48 @@ if(Yii::$app->user->getId() == $user->id){
         interval: false
     })
 </script>
+<br>
+<br>
 
 
+    <?php if(count($advertSimilar) >= 1):  ?>
+    <h3>Похожии объявления</h3>
+    <?php endif; ?>
+    <?php if(count($advertSimilar) < 1):  ?>
+        <h3>Похожих объявлений не найдено</h3>
+    <?php endif; ?>
 
 
+    <div class="row">
+
+        <!-- Post Content Column -->
+        <div class="col-lg-9">
+
+            <?php if(count($advertSimilar) >= 1):  ?>
+            <?php foreach ($advertSimilar as $key => $popular) : ?>
+            <div class="col-md-4 hero-feature">
+                <div class="thumbnail">
+                    <?php
+                        $photo = \board\entities\Photo::find()->where(['advert_id' => $popular->id])->one();
+                    ?>
+                    <a href="<?= \yii\helpers\Url::to(['advert/advert/show', 'id' => $popular->id]) ?>"><img src="<?= Yii::$app->params['storageUri'] . $photo->name ?>"></a>
+                    <div class="caption">
+                        <h3><?= $popular->title ?></h3>
+                        <a href="<?= \yii\helpers\Url::to(['advert/advert/show', 'id' => $popular->id]) ?>"><p><?= substr($popular->content, 0, 50).'...'  ?></p></a>
+                        <p>
+                            <a href="<?= \yii\helpers\Url::to(['advert/advert/show', 'id' => $popular->id]) ?>" class="btn btn-default">Смотреть подробнее</a>
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach;  ?>
+            <?php endif; ?>
 
 
+        </div>
+
+    </div>
 
 
 
