@@ -15,10 +15,17 @@ class ListHelper
         });
     }
 
-    public static function category()
+    public static function category2()
     {
         return ArrayHelper::map(Category::find()->orderBy(['name' => SORT_ASC])->asArray()->all(), 'id', function (array $category) {
             return $category['name'];
+        });
+    }
+
+    public static function category()
+    {
+        return ArrayHelper::map(Category::find()->andWhere(['>', 'depth', 0])->orderBy('lft')->asArray()->all(), 'id', function (array $category) {
+            return ($category['depth'] > 1 ? str_repeat('-- ', $category['depth'] - 1) . ' ' : '') . $category['name'];
         });
     }
 
