@@ -32,6 +32,18 @@ Vagrant.configure(2) do |config|
   # select the box
   config.vm.box = 'bento/ubuntu-16.04'
 
+
+  config.vm.provision 'shell', inline: <<-SHELL
+      sudo apt-get update
+      sudo apt-get install elasticsearch -y
+
+      sudo sed -i 's/#START_DAEMON/START_DAEMON/' /etc/default/elasticsearch
+
+      sudo systemctl restart elasticsearch
+      systemctl status elasticsearch
+    SHELL
+
+
   # should we ask about box updates?
   config.vm.box_check_update = options['box_check_update']
 
