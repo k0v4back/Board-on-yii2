@@ -36,9 +36,8 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/contact/contact/contact']],
+        ['label' => 'Главная', 'url' => ['/site/index']],
+        ['label' => 'Личный кабинет', 'url' => ['/cabinet/profile/index', 'id' => Yii::$app->user->identity->id]],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/user/signup/signup']];

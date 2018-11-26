@@ -6,6 +6,7 @@ use board\entities\Advert;
 use Elasticsearch\Client;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 
 class SearchController extends Controller
 {
@@ -30,92 +31,25 @@ class SearchController extends Controller
         }
         $this->stdout('Creating of index' . PHP_EOL);
 
-//        $this->client->indices()->create([
-//            'index' => 'shop',
-//            'body' => [
-//                'mappings' => [
-//                    'products' => [
-//                        '_source' => [
-//                            'enabled' => true,
-//                        ],
-//                        'properties' => [
-//                            'id' => [
-//                                'type' => 'integer',
-//                            ],
-//                            'name' => [
-//                                'type' => 'text',
-//                            ],
-//                            'description' => [
-//                                'type' => 'text',
-//                            ],
-//                            'price' => [
-//                                'type' => 'integer',
-//                            ],
-//                            'rating' => [
-//                                'type' => 'float',
-//                            ],
-//                            'brand' => [
-//                                'type' => 'integer',
-//                            ],
-//                            'categories' => [
-//                                'type' => 'integer',
-//                            ],
-//                            'tags' => [
-//                                'type' => 'integer',
-//                            ],
-//                            'values' => [
-//                                'type' => 'nested',
-//                                'properties' => [
-//                                    'characteristic' => [
-//                                        'type' => 'integer'
-//                                    ],
-//                                    'value_string' => [
-//                                        'type' => 'keyword',
-//                                    ],
-//                                    'value_int' => [
-//                                        'type' => 'integer',
-//                                    ],
-//                                ]
-//                            ]
-//                        ]
-//                    ]
-//                ]
-//            ]
-//        ]);
-//        $this->stdout('Indexing of products' . PHP_EOL);
-//        foreach ($query->each() as $product) {
-//            /** @var Product $product */
-//            $this->stdout('Product #' . $product->id . PHP_EOL);
-//            $this->client->index([
-//                'index' => 'shop',
-//                'type' => 'products',
-//                'id' => $product->id,
-//                'body' => [
-//                    'id' => $product->id,
-//                    'name' => $product->name,
-//                    'description' => strip_tags($product->description),
-//                    'price' => $product->price_new,
-//                    'rating' => $product->rating,
-//                    'brand' => $product->brand_id,
-//                    'categories' => ArrayHelper::merge(
-//                        [$product->category->id],
-//                        ArrayHelper::getColumn($product->category->parents, 'id'),
-//                        ArrayHelper::getColumn($product->categories, 'id'),
-//                        array_reduce(array_map(function (Category $category) {
-//                            return ArrayHelper::getColumn($category->parents, 'id');
-//                        }, $product->categories), 'array_merge', [])
-//                    ),
-//                    'tags' => ArrayHelper::getColumn($product->tagAssignments, 'tag_id'),
-//                    'values' => array_map(function (Value $value) {
-//                        return [
-//                            'characteristic' => $value->characteristic_id,
-//                            'value_string' => (string)$value->value,
-//                            'value_int' => (int)$value->value,
-//                        ];
-//                    }, $product->values),
-//                ],
-//            ]);
-//        }
-//        $this->stdout('Done!' . PHP_EOL);
+        foreach ($query->each() as $advert){
+            $this->stdout('Advert #' . $advert->id . PHP_EOL);
+
+//            Индексируем объявления
+
+            //curl -XGET 'http://localhost:9200/board/advert/1/?pretty&_source=false'
+
+            $this->client->index([
+                'index' => 'board',
+                'type' => 'advert',
+                'id' => $advert->id,
+                'body' => [
+                    'category_id' => (int)$advert->category_id,
+                    'region_id' => (int)$advert->region_id,
+                    'title' => strip_tags($advert->title),
+                    'content' => strip_tags($advert->content),
+                ]
+            ]);
+        }
+        $this->stdout('Done!' . PHP_EOL);
     }
 }
