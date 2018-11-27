@@ -29,6 +29,7 @@ class SetUp implements BootstrapInterface
             return $app->mailer;
         });
 
+        //Elasticsearch
         $container->setSingleton(Client::class, function () {
             return ClientBuilder::create()->build();
         });
@@ -39,10 +40,6 @@ class SetUp implements BootstrapInterface
             $app->params['adminEmail'],
             Instance::of(MailerInterface::class)
         ]);
-
-//        $container->setSingleton(SmsRuService::class, [], [
-//            $app->params['appId'],
-//        ]);
 
         $container->setSingleton(SmsRuService::class, function () use ($app) {
             return new SmsRuService(Yii::$app->params['appId']);

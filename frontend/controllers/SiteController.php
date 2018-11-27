@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use board\entities\Category;
 use board\forms\search\SearchForm;
 use board\repositories\SearchAdvertRepository;
+use Elasticsearch\Client;
 use yii\web\Controller;
 use Yii;
 /**
@@ -13,10 +14,12 @@ use Yii;
 class SiteController extends Controller
 {
     private $searchAdvertRepository;
+    private $client;
 
-    public function __construct($id, $module, SearchAdvertRepository $searchAdvertRepository , $config = [])
+    public function __construct($id, $module, SearchAdvertRepository $searchAdvertRepository, Client $client, $config = [])
     {
         $this->searchAdvertRepository = $searchAdvertRepository;
+        $this->client = $client;
         parent::__construct($id, $module, $config);
     }
 
@@ -32,6 +35,7 @@ class SiteController extends Controller
             ],
         ];
     }
+
 
     public function actionAbout()
     {
@@ -52,6 +56,11 @@ class SiteController extends Controller
         $form->validate();
 
         $dataProvider = $this->searchAdvertRepository->search($form);
+
+//        echo '<pre>';
+//        print_r($dataProvider);
+//        echo '</pre>';
+//        die();
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

@@ -20,16 +20,17 @@ class SearchController extends Controller
 
     public function actionReindex()
     {
-        $query = Advert::find()->orderBy('id');
+        $query = Advert::find()
+            ->orderBy('id');
 
         $this->stdout('Clearing' . PHP_EOL);
 
         try {
             $this->client->indices()->delete(['index' => 'board']);
         } catch (Missing404Exception $e) {
-            $this->stdout('Index is empty' . PHP_EOL);
+            $this->stdout('Индексы пусты' . PHP_EOL);
         }
-        $this->stdout('Creating of index' . PHP_EOL);
+        $this->stdout('Создание индексов' . PHP_EOL);
 
         foreach ($query->each() as $advert){
             $this->stdout('Advert #' . $advert->id . PHP_EOL);
@@ -43,10 +44,11 @@ class SearchController extends Controller
                 'type' => 'advert',
                 'id' => $advert->id,
                 'body' => [
-                    'category_id' => (int)$advert->category_id,
+                    'id' => $advert->id,
                     'region_id' => (int)$advert->region_id,
                     'title' => strip_tags($advert->title),
                     'content' => strip_tags($advert->content),
+                    'category_id' => (int)$advert->category_id,
                 ]
             ]);
         }
