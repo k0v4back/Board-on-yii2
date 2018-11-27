@@ -57,6 +57,7 @@ class SiteController extends Controller
 
         $dataProvider = $this->searchAdvertRepository->search($form);
 
+
 //        echo '<pre>';
 //        print_r($dataProvider);
 //        echo '</pre>';
