@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use board\entities\Category;
 use board\forms\search\SearchForm;
 use board\repositories\SearchAdvertRepository;
 use yii\web\Controller;
@@ -34,6 +35,13 @@ class SiteController extends Controller
 
     public function actionAbout()
     {
+//        $category = Category::findOne(['id' => 2])->
+
+//        $category = Category::findOne(['id' => 2]);
+//        var_dump($category->getChildren()->select('id')->column());
+//        die();
+//        echo 'Test';die();
+
         return $this->render('about');
     }
 
