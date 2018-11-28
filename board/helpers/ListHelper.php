@@ -2,6 +2,7 @@
 
 namespace board\helpers;
 
+use board\entities\Advert;
 use board\entities\Category;
 use yii\helpers\ArrayHelper;
 use board\entities\Regions;
@@ -41,5 +42,10 @@ class ListHelper
         return ArrayHelper::map(Regions::find()->where(['>', 'parent_id', 0])->orderBy(['name' => SORT_ASC])->asArray()->all(), 'id', function (array $region) {
             return $region['name'];
         });
+    }
+
+    public static function advertStatus()
+    {
+        return ArrayHelper::map(Advert::find()->all(), 'status', 'status');
     }
 }

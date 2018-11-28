@@ -12,14 +12,14 @@ use board\entities\Advert;
  */
 class AdvertSearch extends Advert
 {
-    /**
-     * {@inheritdoc}
-     */
+    public $user;
     public function rules()
     {
         return [
             [['id', 'user_id', 'category_id', 'region_id', 'price', 'status', 'created_at', 'updated_at', 'published_at', 'expired_at'], 'integer'],
             [['title', 'address', 'content', 'reject_reason', 'city'], 'safe'],
+            [['user'], 'safe'],
+            [['category'], 'safe'],
         ];
     }
 
@@ -57,6 +57,8 @@ class AdvertSearch extends Advert
             return $dataProvider;
         }
 
+        $query->joinWith('user');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -75,7 +77,8 @@ class AdvertSearch extends Advert
             ->andFilterWhere(['like', 'address', $this->address])
             ->andFilterWhere(['like', 'content', $this->content])
             ->andFilterWhere(['like', 'reject_reason', $this->reject_reason])
-            ->andFilterWhere(['like', 'city', $this->city]);
+            ->andFilterWhere(['like', 'city', $this->city])
+            ->andFilterWhere(['like', 'user.username', $this->user]);
 
         return $dataProvider;
     }

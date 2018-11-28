@@ -7,41 +7,49 @@ use yii\grid\GridView;
 /* @var $searchModel backend\search\AdvertSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Adverts';
+$this->title = 'Объявления';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="advert-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
-        <?= Html::a('Create Advert', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать объявление', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <div class="box box-info">
+        <div class="box-body" style="overflow-y: hidden">
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'user_id',
-            'category_id',
-            'region_id',
-            'title',
-            //'price',
-            //'address',
-            //'content:ntext',
-            //'status',
-            //'reject_reason:ntext',
-            //'created_at',
-            //'updated_at',
-            //'published_at',
-            //'expired_at',
-            //'city',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                    'id',
+                    [
+                            'attribute' => 'user',
+                        'label' => 'Пользователь',
+                        'value' => 'user.username'
+                    ],
+                    [
+                        'attribute' => 'title',
+                        'label' => 'Заголовок',
+                    ],
+                    [
+                        'attribute' => 'price',
+                        'label' => 'Цена',
+                    ],
+                    [
+                        'attribute' => 'status',
+                        'label' => 'Статус',
+                        'filter' => \board\helpers\AdvertHelper::statusList(),
+                        'value' => function (\board\entities\Advert $user) {
+                            return \board\helpers\AdvertHelper::statusLabel($user->status);
+                        },
+                        'format' => 'raw',
+                    ],
+                    ['class' => 'yii\grid\ActionColumn'],
+                ],
+            ]); ?>
+        </div>
+    </div>
 </div>
