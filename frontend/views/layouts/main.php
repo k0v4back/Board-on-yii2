@@ -42,7 +42,7 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Signup', 'url' => ['/user/signup/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/user/login/login']];
     } else {
-        ['label' => 'Личный кабинет', 'url' => ['/cabinet/profile/index', 'id' => Yii::$app->user->identity->id]];
+        $menuItems[] = ['label' => 'Личный кабинет', 'url' => ['/cabinet/profile/index', 'id' => Yii::$app->user->identity->id]];
         $menuItems[] = '<li>'
             . Html::beginForm(['/user/login/logout'], 'post')
             . Html::submitButton(

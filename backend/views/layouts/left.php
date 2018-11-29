@@ -35,6 +35,7 @@
                     ['label' => 'Регионы', 'icon' => 'home', 'url' => ['/regions']],
                     ['label' => 'Категории', 'icon' => 'bookmark', 'url' => ['/category']],
                     ['label' => 'Объявления', 'icon' => 'list', 'url' => ['/advert']],
+                    ['label' => 'Поддержка', 'icon' => 'support', 'url' => ['/ticket']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     [
                         'label' => 'Some tools',
