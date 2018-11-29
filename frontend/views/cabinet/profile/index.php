@@ -73,7 +73,10 @@ use yii\helpers\Url;
         <?php endif; ?>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
             Избранные
-        </button>
+        </button><br><br>
+        <a href="<?= Url::to(['/cabinet/ticket/index', 'user_id' => $model->id]) ?>" class="btn btn-danger">
+            Обратиться в службу поддержки
+        </a>
     </div>
 
         <!-- Modal -->

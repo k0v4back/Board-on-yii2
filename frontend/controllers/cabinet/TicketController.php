@@ -4,6 +4,7 @@ namespace frontend\controllers\cabinet;
 
 use board\entities\ticket\Messages;
 use board\entities\ticket\Ticket;
+use board\entities\User;
 use board\forms\ticket\TicketForm;
 use board\forms\ticket\TicketMessageForm;
 use board\services\ticket\TicketMessageService;
@@ -60,19 +61,27 @@ class TicketController extends Controller
         $user_id = Yii::$app->user->identity->id;
         $form = new TicketMessageForm();
 
+        $messages = Messages::find()->where(['ticket_id' => $ticket])->all();
+
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
                 $this->ticketMessageService->send($ticket, $user_id, $form);
                 Yii::$app->session->setFlash('success', 'Ваше сообщение успешно отправлено админу.');
-                return $this->redirect(['cabinet/ticket/index', 'user_id' => $user_id]);
+                return $this->redirect(['cabinet/ticket/messages', 'ticket' => $ticket]);
             } catch (\Exception $e) {
                 Yii::$app->session->setFlash('danger', 'Возникла ошибка при отправки сообщения админу' . $e);
-                return $this->redirect(['cabinet/ticket/index', 'user_id' => $user_id]);
+                return $this->redirect(['cabinet/ticket/messages', 'ticket' => $ticket]);
             }
         }
 
         return $this->render('sendMessage', [
             'model' => $form,
+            'messages' => $messages,
         ]);
+    }
+
+    public static function user($id)
+    {
+        return User::find()->where(['id' => $id])->all();
     }
 }

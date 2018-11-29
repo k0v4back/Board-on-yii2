@@ -1,10 +1,18 @@
-<h3>Это тикеты</h3>
-
 <?php
 
-//var_dump($tickets);
+use yii\widgets\Breadcrumbs;
 
+
+$this->params['breadcrumbs'][] = [
+    'label' => 'Кабинет', // название ссылки
+    'url' => ['/cabinet/profile/index', 'id' => Yii::$app->user->getId()] // сама ссылка
+];
+$this->params['breadcrumbs'][] = ['label' => 'Обратная связь'];
 ?>
+
+<h3>Обратная связь</h3>
+<a href="<?= \yii\helpers\Url::to(['/cabinet/ticket/create', 'user_id' => Yii::$app->user->getId()]) ?>" class="btn btn-primary">Содать новое обращение</a>
+
 
 
 
