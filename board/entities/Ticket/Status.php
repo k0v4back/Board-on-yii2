@@ -3,7 +3,7 @@
 namespace board\entities\ticket;
 
 use board\entities\User;
-use yii\base\Model;
+use yii\db\ActiveRecord;
 
 /**
  * @property int $id
@@ -13,7 +13,7 @@ use yii\base\Model;
  * @property int $updated_at
  * @property int $status
  */
-class Status extends Model
+class Status extends ActiveRecord
 {
     public const OPEN = 'open';
     public const APPROVED = 'approved';
