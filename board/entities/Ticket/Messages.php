@@ -26,6 +26,7 @@ class Messages extends ActiveRecord
         $ticket = new static();
         $ticket->user_id = $user_id;
         $ticket->content = $message;
+        $ticket->created_at = time();
         return $ticket;
     }
 

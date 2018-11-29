@@ -3,7 +3,6 @@
 namespace board\entities\ticket;
 
 use board\entities\User;
-use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -26,6 +25,7 @@ class Ticket extends ActiveRecord
         $ticket->subject = $subject;
         $ticket->content = $content;
         $ticket->status = Status::OPEN;
+        $ticket->created_at = time();
         return $ticket;
     }
 
@@ -33,11 +33,13 @@ class Ticket extends ActiveRecord
     {
         $this->subject = $subject;
         $this->content = $content;
+        $this->updated_at = time();
     }
 
     public function editStatus($status)
     {
         $this->status = $status;
+        $this->updated_at = time();
     }
 
     public function canBeRemove()
