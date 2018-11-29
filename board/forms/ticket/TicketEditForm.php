@@ -4,12 +4,11 @@ namespace board\forms\ticket;
 
 use yii\base\Model;
 
-class TicketForm extends Model
+class TicketEditForm extends Model
 {
-    public $user_id;
+    public $id;
     public $subject;
     public $content;
-    public $status;
 
     public static function tableName()
     {
@@ -19,9 +18,8 @@ class TicketForm extends Model
     public function rules()
     {
         return [
-            [['user_id', 'status'], 'integer'],
-            [['subject', 'content', 'status'], 'required'],
-            [['subject', 'content'], 'string', 'max' => 255],
+            [['id'], 'integer'],
+            [['subject', 'content'], 'required'],
         ];
     }
 }
