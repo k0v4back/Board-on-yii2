@@ -17,7 +17,7 @@ class m181129_114749_create_ticket_status_table extends Migration
             'ticket_id' => $this->integer(),
             'user_id' => $this->integer(),
             'created_at' => $this->string()->notNull(),
-            'updated_at' => $this->string()->notNull(),
+            'updated_at' => $this->string(),
             'status' => $this->integer(),
         ]);
 

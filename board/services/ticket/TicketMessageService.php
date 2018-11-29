@@ -1,9 +1,8 @@
 <?php
 
-namespace board\services\category;
+namespace board\services\ticket;
 
 use board\entities\ticket\Ticket;
-use board\forms\ticket\TicketForm;
 use board\forms\ticket\TicketMessageForm;
 use board\repositories\TicketRepository;
 
@@ -16,11 +15,11 @@ class TicketMessageService
         $this->ticketRepository = $ticketRepository;
     }
 
-    public function send(TicketMessageForm $form)
+    public function send($user_id, TicketMessageForm $form)
     {
         $ticker = Ticket::create(
-            $form->user_id,
-            $form->ticket_id,
+            $form->user_id = $user_id,
+            $form->subject,
             $form->content
         );
         $this->ticketRepository->save($ticker);

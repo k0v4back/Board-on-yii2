@@ -1,6 +1,6 @@
 <?php
 
-namespace board\services\category;
+namespace board\services\ticket;
 
 use board\entities\ticket\Ticket;
 use board\forms\ticket\TicketEditForm;

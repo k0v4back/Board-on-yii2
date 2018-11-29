@@ -15,9 +15,9 @@ use yii\db\ActiveRecord;
  */
 class Status extends ActiveRecord
 {
-    public const OPEN = 'open';
-    public const APPROVED = 'approved';
-    public const CLOSED = 'closed';
+    public const OPEN = 1;
+    public const APPROVED = 2;
+    public const CLOSED = 3;
 
     public function statusList()
     {
