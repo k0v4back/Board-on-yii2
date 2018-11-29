@@ -46,6 +46,4 @@ class TicketService
         );
         $this->ticketRepository->save($ticket);
     }
-
-
 }

@@ -91,6 +91,15 @@ class Ticket extends ActiveRecord
     }
 
 
+    public function addMessage($user_id, $message)
+    {
+        if($this->isClosed()){
+            throw new \DomainException('Заявка уже закрыта, сообщения отправлять нельзя!');
+        }
+        $this->sendMessage($user_id, $message);
+    }
+
+
     //----------------------------------------------------------------
     public function getUser()
     {
