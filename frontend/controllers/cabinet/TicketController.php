@@ -26,6 +26,11 @@ class TicketController extends Controller
 
     public function actionIndex($user_id)
     {
+        if(Yii::$app->user->isGuest)
+        {
+            return $this->redirect('/user/login/login');
+        }
+        
         $tickets = Ticket::find()->where(['user_id' => $user_id])->orderBy(['id' => SORT_DESC])->all();
 
         return $this->render('index', [
@@ -35,6 +40,11 @@ class TicketController extends Controller
 
     public function actionCreate($user_id)
     {
+        if(Yii::$app->user->isGuest)
+        {
+            return $this->redirect('/user/login/login');
+        }
+        
         $tickets = Ticket::find()->where(['user_id' => $user_id]);
 
         $form = new TicketForm();
@@ -57,6 +67,10 @@ class TicketController extends Controller
 
     public function actionMessages($ticket)
     {
+        if(Yii::$app->user->isGuest)
+        {
+            return $this->redirect('/user/login/login');
+        }
         $tickets = Messages::find()->where(['ticket_id' => $ticket]);
         $user_id = Yii::$app->user->identity->id;
         $form = new TicketMessageForm();
