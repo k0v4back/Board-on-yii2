@@ -2,6 +2,7 @@
 
 namespace board\repositories;
 
+use board\entities\ticket\Messages;
 use board\entities\ticket\Ticket;
 use DomainException;
 
@@ -19,6 +20,13 @@ class TicketRepository
     {
         if (!$ticket->save()) {
             throw new \RuntimeException('Ошибка добавления заявки');
+        }
+    }
+
+    public function saveMessage(Messages $message)
+    {
+        if (!$message->save()) {
+            throw new \RuntimeException('Ошибка при отправки сообщения');
         }
     }
 

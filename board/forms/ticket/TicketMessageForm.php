@@ -6,9 +6,9 @@ use yii\base\Model;
 
 class TicketMessageForm extends Model
 {
+    public $ticket_id;
     public $user_id;
     public $content;
-    public $subject;
 
     public static function tableName()
     {
@@ -18,8 +18,8 @@ class TicketMessageForm extends Model
     public function rules()
     {
         return [
-            [['user_id'], 'integer'],
-            [['content', 'subject'], 'string'],
+            [['user_id', 'ticket_id'], 'integer'],
+            [['content'], 'string'],
         ];
     }
 

@@ -2,7 +2,9 @@
 
 namespace frontend\controllers\cabinet;
 
+use board\entities\ticket\Messages;
 use board\entities\ticket\Ticket;
+use board\forms\ticket\TicketForm;
 use board\forms\ticket\TicketMessageForm;
 use board\services\ticket\TicketMessageService;
 use board\services\ticket\TicketService;
@@ -23,32 +25,53 @@ class TicketController extends Controller
 
     public function actionIndex($user_id)
     {
-        $tickets = Ticket::find()->where(['user_id' => $user_id])->all();
+        $tickets = Ticket::find()->where(['user_id' => $user_id])->orderBy(['id' => SORT_DESC])->all();
 
         return $this->render('index', [
             'tickets' => $tickets,
         ]);
     }
 
-    public function actionSend($user_id)
+    public function actionCreate($user_id)
     {
         $tickets = Ticket::find()->where(['user_id' => $user_id]);
 
-        $form = new TicketMessageForm();
+        $form = new TicketForm();
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
-                $this->ticketMessageService->send($user_id, $form);
-                Yii::$app->session->setFlash('success', 'Ваше сообщение успешно отправлено админу.');
+                $this->ticketService->create($user_id, $form);
+                Yii::$app->session->setFlash('success', 'Ваше заявка успешно создана, теперь напишите админу.');
                 return $this->redirect(['cabinet/ticket/index', 'user_id' => $user_id]);
             } catch (\Exception $e) {
-                Yii::$app->session->setFlash('danger', 'Возникла ошибка при отправки сообщения админу'. $e);
+                Yii::$app->session->setFlash('danger', 'Возникла ошибка при создании заявки' . $e);
                 return $this->redirect(['cabinet/ticket/index', 'user_id' => $user_id]);
             }
         }
 
+        return $this->render('createTicket', [
+            'model' => $form,
+        ]);
+    }
 
-            return $this->render('sendMessage', [
+    public function actionMessages($ticket)
+    {
+        $tickets = Messages::find()->where(['ticket_id' => $ticket]);
+        $user_id = Yii::$app->user->identity->id;
+        $form = new TicketMessageForm();
+
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->ticketMessageService->send($ticket, $user_id, $form);
+                Yii::$app->session->setFlash('success', 'Ваше сообщение успешно отправлено админу.');
+                return $this->redirect(['cabinet/ticket/index', 'user_id' => $user_id]);
+            } catch (\Exception $e) {
+                Yii::$app->session->setFlash('danger', 'Возникла ошибка при отправки сообщения админу' . $e);
+                return $this->redirect(['cabinet/ticket/index', 'user_id' => $user_id]);
+            }
+        }
+
+        return $this->render('sendMessage', [
             'model' => $form,
         ]);
     }

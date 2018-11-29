@@ -17,10 +17,10 @@ class TicketService
         $this->ticketRepository = $ticketRepository;
     }
 
-    public function create(TicketForm $form)
+    public function create($user_id, TicketForm $form)
     {
         $ticker = Ticket::create(
-            $form->user_id,
+            $form->user_id = $user_id,
             $form->subject,
             $form->content
         );

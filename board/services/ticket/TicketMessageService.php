@@ -2,6 +2,7 @@
 
 namespace board\services\ticket;
 
+use board\entities\ticket\Messages;
 use board\entities\ticket\Ticket;
 use board\forms\ticket\TicketMessageForm;
 use board\repositories\TicketRepository;
@@ -15,14 +16,14 @@ class TicketMessageService
         $this->ticketRepository = $ticketRepository;
     }
 
-    public function send($user_id, TicketMessageForm $form)
+    public function send($ticket_id, $user_id, TicketMessageForm $form)
     {
-        $ticker = Ticket::create(
+        $ticker = Messages::send(
+            $form->ticket_id = $ticket_id,
             $form->user_id = $user_id,
-            $form->subject,
             $form->content
         );
-        $this->ticketRepository->save($ticker);
+        $this->ticketRepository->saveMessage($ticker);
         return $ticker;
     }
 

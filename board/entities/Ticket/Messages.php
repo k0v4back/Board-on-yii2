@@ -3,7 +3,6 @@
 namespace board\entities\ticket;
 
 use board\entities\User;
-use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -21,15 +20,20 @@ use yii\db\ActiveRecord;
  */
 class Messages extends ActiveRecord
 {
-    public static function send($user_id, $message)
+    public static function send($ticket_id, $user_id, $message)
     {
         $ticket = new static();
+        $ticket->ticket_id = $ticket_id;
         $ticket->user_id = $user_id;
         $ticket->content = $message;
         $ticket->created_at = time();
         return $ticket;
     }
 
+    public static function tableName()
+    {
+        return '{{%ticket_messages}}';
+    }
 
     public function getUser()
     {
