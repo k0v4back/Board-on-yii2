@@ -29,6 +29,16 @@ class Ticket extends ActiveRecord
         return $ticket;
     }
 
+    public static function ticketCreate($ticket_id, $user_id)
+    {
+        $ticket = new Status();
+        $ticket->ticket_id = $ticket_id;
+        $ticket->user_id = $user_id;
+        $ticket->created_at = time();
+        $ticket->status = Status::OPEN;
+        $ticket->save();
+    }
+
     public function edit($subject, $content)
     {
         $this->subject = $subject;

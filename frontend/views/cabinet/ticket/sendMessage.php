@@ -1,10 +1,19 @@
 <?php
 
 use yii\widgets\ActiveForm;
+use board\helpers\HistoryHelper;
+use board\entities\ticket\Status;
 
+//var_dump($lastHistory->status);die();
 ?>
 
 <a href="<?= \yii\helpers\Url::to(['cabinet/ticket/index', 'user_id' => Yii::$app->user->getId()]) ?>" class="btn btn-success">Назад</a><br><br>
+
+<?php if($lastHistory->status === \board\entities\ticket\Status::CLOSED) : ?>
+    <div class="alert alert-danger">
+        Это обращени закрыто!
+    </div>
+<?php endif; ?>
 
 <div class="container">
     <div class="row">
@@ -40,12 +49,22 @@ use yii\widgets\ActiveForm;
                 <?php endforeach; ?>
             </div>
         </div>
+        <div class="col-lg-6 col-md-6 col-sm-6" style="border: 1px solid #DDDDDD; border-radius: 5px">
+            <h3>История</h3>
+            <?php foreach ($history as $status): ?>
+            <div >
+                <div>
+                    <?= HistoryHelper::statusLabel($status->status) ?> <?= date("G:i:s d-m-Y", $status->created_at) ?><br><br>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
     </div>
 </div>
 <br>
 <br>
 
-
+<?php if($lastHistory->status == Status::OPEN || $lastHistory->status == Status::APPROVED) : ?>
 <div class="container">
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -59,3 +78,9 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
+<?php endif; ?>
+<?php if($lastHistory->status === \board\entities\ticket\Status::CLOSED) : ?>
+    <div>
+        <h3>Вы не можете отправлять сообщения, потому что это обращение закрыто</h3>
+    </div>
+<?php endif; ?>

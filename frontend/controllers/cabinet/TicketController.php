@@ -3,6 +3,7 @@
 namespace frontend\controllers\cabinet;
 
 use board\entities\ticket\Messages;
+use board\entities\ticket\Status;
 use board\entities\ticket\Ticket;
 use board\entities\User;
 use board\forms\ticket\TicketForm;
@@ -71,9 +72,12 @@ class TicketController extends Controller
         {
             return $this->redirect('/user/login/login');
         }
+
         $tickets = Messages::find()->where(['ticket_id' => $ticket]);
         $user_id = Yii::$app->user->identity->id;
         $form = new TicketMessageForm();
+        $history = Status::find()->where(['ticket_id' => $ticket])->all();
+        $lastHistory = Status::find()->where(['ticket_id' => $ticket])->orderBy(['id' => SORT_DESC])->one();
 
         $messages = Messages::find()->where(['ticket_id' => $ticket])->all();
 
@@ -91,6 +95,8 @@ class TicketController extends Controller
         return $this->render('sendMessage', [
             'model' => $form,
             'messages' => $messages,
+            'history' => $history,
+            'lastHistory' => $lastHistory,
         ]);
     }
 

@@ -19,13 +19,14 @@ class TicketService
 
     public function create($user_id, TicketForm $form)
     {
-        $ticker = Ticket::create(
+        $ticket = Ticket::create(
             $form->user_id = $user_id,
             $form->subject,
             $form->content
         );
-        $this->ticketRepository->save($ticker);
-        return $ticker;
+        $this->ticketRepository->save($ticket);
+        Ticket::ticketCreate($ticket->id, $ticket->user_id);
+        return $ticket;
     }
 
     public function edit($id, TicketEditForm $editForm)
