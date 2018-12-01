@@ -1,6 +1,8 @@
 <?php
 
 namespace board\entities;
+
+use board\entities\dialog\Dialog;
 use yii\db\ActiveRecord;
 
 /**
@@ -63,6 +65,46 @@ class Advert extends ActiveRecord
         $this->content = $content;
         $this->updated_at = time();
     }
+
+    //Dialogs
+    public function closeMessage($dialogId, $messageId)
+    {
+
+    }
+
+    public function writeClientMessage($formId, $message)
+    {
+        $this->getOrCreateDialog($formId)->writeMessage($formId, $message);
+    }
+
+    public function writeOwnerMessage($toId, $message)
+    {
+        $this->getDialogWith($toId)->writeMessage($this->user_id, $message);
+    }
+
+    public function getOrCreateDialog($userId)
+    {
+        $dialog = $this->getDialogWith($userId);
+        if(!$dialog){
+            $dialog = new Dialog();
+            $dialog->owner = $this->user_id;
+            $dialog->user = $userId;
+            $dialog->save();
+        }
+        return $dialog;
+    }
+
+    public function getDialogWith(int $userId)
+    {
+        $dialog = Dialog::find()->where(['owner' => $this->user_id])->andWhere(['user' => $userId])->all();
+        if(!$dialog){
+            throw new \DomainException('Такой диалог не найден');
+        }
+        return $dialog;
+    }
+
+
+
 
 
     public static function tableName()
