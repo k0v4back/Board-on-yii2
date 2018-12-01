@@ -179,9 +179,8 @@ if(Yii::$app->user->getId() == $user->id){
     })
 </script>
 
-
     <br>
-    <a href="#" class="btn btn-success"><i class="fas fa-envelope"></i> Написать сообщение</a>
+    <a href="<?= \yii\helpers\Url::to(['dialog/dialog/create', 'advert' => $advert[0]['id'], 'owner' => $user->id]) ?>" class="btn btn-success"><i class="fas fa-envelope"></i> Написать сообщение</a>
     <a href="#" class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal"><i class="fas fa-phone"></i> Позвонить</a>
 
     <!-- Modal -->

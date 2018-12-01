@@ -35,7 +35,7 @@ class Advert extends ActiveRecord
     const STATUS_ACTIVE = 2;
     const STATUS_CLOSED = 3;
 
-    public static function crete($user_id, $category_id, $title, $price, $content, $address, $region_id, $city, $updated_at = null, $published_at = null) : Advert
+    public static function crete($user_id, $category_id, $title, $price, $content, $address, $region_id, $city, $updated_at = null, $published_at = null): Advert
     {
         $advert = new static();
         $advert->user_id = $user_id;
@@ -92,35 +92,33 @@ class Advert extends ActiveRecord
         $this->getDialogWith($userId)->readByOwner();
     }
 
-    public function getOrCreateDialog($userId)
+    public function getOrCreateDialog(int $advertId, int $ownerId, int $userId)
     {
-        if ($userId === $this->user_id){
-            throw new \DomainException('Вы не можете отправить сообщение самому себе');
+        if ($userId === $ownerId) {
+            throw new \DomainException('Вы не можете отправить сообщение самому себе!');
         }
 
-        $dialog = $this->getDialogWith($userId);
-        if(!$dialog){
+        $dialog = Dialog::find()->where(['owner_id' => $ownerId])->andWhere(['client_id' => $userId])->all();
+        if (!$dialog) {
             $dialog = new Dialog();
-            $dialog->advert_id = $this->id;
-            $dialog->owner_id = $this->user_id;
+            $dialog->advert_id = $advertId;
+            $dialog->owner_id = $ownerId;
             $dialog->client_id = $userId;
             $dialog->created_at = time();
             $dialog->save();
         }
         return $dialog;
+
     }
 
-    public function getDialogWith(int $userId) : Dialog
+    public function getDialogWith(int $userId): Dialog
     {
-        $dialog = Dialog::find()->where(['owner' => $this->user_id])->andWhere(['user' => $userId])->all();
-        if(!$dialog){
+        $dialog = Dialog::find()->where(['owner_id' => $this->user_id])->andWhere(['client_id' => $userId])->all();
+        if (!$dialog) {
             throw new \DomainException('Такой диалог не найден');
         }
         return $dialog;
     }
-
-
-
 
 
     public static function tableName()
@@ -130,8 +128,7 @@ class Advert extends ActiveRecord
 
     public static function addFavorites($currentUser, Advert $advert)
     {
-        if(!\Yii::$app->user->isGuest)
-        {
+        if (!\Yii::$app->user->isGuest) {
             $redis = \Yii::$app->redis;
             $redis->sadd("user:{$currentUser}:favoriteAdvert", $advert->id);
         }
@@ -140,8 +137,7 @@ class Advert extends ActiveRecord
 
     public static function deleteFavorites($currentUser, Advert $advert)
     {
-        if(!\Yii::$app->user->isGuest)
-        {
+        if (!\Yii::$app->user->isGuest) {
             $redis = \Yii::$app->redis;
             $redis->srem("user:{$currentUser}:favoriteAdvert", $advert->id);
         }
@@ -151,8 +147,7 @@ class Advert extends ActiveRecord
 
     public static function getFavorites()
     {
-        if(!\Yii::$app->user->isGuest)
-        {
+        if (!\Yii::$app->user->isGuest) {
             $redis = \Yii::$app->redis;
             $currentUser = \Yii::$app->user->identity->id;
             $key = "user:{$currentUser}:favoriteAdvert";
