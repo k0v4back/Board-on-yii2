@@ -72,29 +72,45 @@ class Advert extends ActiveRecord
 
     }
 
-    public function writeClientMessage($formId, $message)
+    public function writeClientMessages($formId, $message)
     {
         $this->getOrCreateDialog($formId)->writeMessage($formId, $message);
     }
 
-    public function writeOwnerMessage($toId, $message)
+    public function writeOwnerMessages($toId, $message)
     {
         $this->getDialogWith($toId)->writeMessage($this->user_id, $message);
     }
 
+    public function readClientMessages($userId)
+    {
+        $this->getDialogWith($userId)->readByClient();
+    }
+
+    public function readOwnerMessages($userId)
+    {
+        $this->getDialogWith($userId)->readByOwner();
+    }
+
     public function getOrCreateDialog($userId)
     {
+        if ($userId === $this->user_id){
+            throw new \DomainException('Вы не можете отправить сообщение самому себе');
+        }
+
         $dialog = $this->getDialogWith($userId);
         if(!$dialog){
             $dialog = new Dialog();
-            $dialog->owner = $this->user_id;
-            $dialog->user = $userId;
+            $dialog->advert_id = $this->id;
+            $dialog->owner_id = $this->user_id;
+            $dialog->client_id = $userId;
+            $dialog->created_at = time();
             $dialog->save();
         }
         return $dialog;
     }
 
-    public function getDialogWith(int $userId)
+    public function getDialogWith(int $userId) : Dialog
     {
         $dialog = Dialog::find()->where(['owner' => $this->user_id])->andWhere(['user' => $userId])->all();
         if(!$dialog){
