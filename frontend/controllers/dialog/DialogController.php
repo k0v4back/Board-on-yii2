@@ -4,6 +4,8 @@ namespace frontend\controllers\dialog;
 
 use board\entities\Advert;
 use board\entities\dialog\Dialog;
+use board\entities\dialog\Messages;
+use board\entities\Photo;
 use board\forms\dialog\MessagesForm;
 use board\services\dialog\DialogService;
 use yii\web\Controller;
@@ -28,9 +30,16 @@ class DialogController extends Controller
         $form = new MessagesForm();
         $form->dialog_id = $id;
 
+        $owner_id = Dialog::find()->where(['id' => $id])->andWhere(['client_id' => Yii::$app->user->getId()])->all();
+
+        $messages = Messages::find()->where(['dialog_id' => $id])->all();
+        $dialog = Dialog::find()->where(['id' => $id])->all();
+        $advert = Advert::find()->where(['id' => $dialog[0]['advert_id']])->one();
+        $photo = Photo::find()->where(['advert_id' => $advert->id])->all();
+
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
-                $this->dialogService->createMessage($id, $form);
+                $this->dialogService->createMessage($id, $form, $owner_id);
                 return $this->refresh();
             } catch (\Exception $e) {
                 Yii::$app->session->setFlash('danger', 'Ошибка! Сообщение не отправлено!'. $e);
@@ -39,6 +48,10 @@ class DialogController extends Controller
 
         return $this->render('index', [
             'model' => $form,
+            'messages' => $messages,
+            'owner_id' => $owner_id,
+            'advert' => $advert,
+            'photo' => $photo,
         ]);
     }
 
