@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  * @property int $dialog_id
  * @property string $user_id
  * @property string $message
+ * @property string $owner_id
  */
 class Messages extends ActiveRecord
 {

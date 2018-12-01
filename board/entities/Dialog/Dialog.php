@@ -30,9 +30,9 @@ class Dialog extends ActiveRecord
 
 //        $createMessage = Messages::find()->where(['user_id' => $userId])->all();
         $createMessage = new Messages();
-        $message->dialog_id = $this->id;
-        $message->user_id = $userId;
-        $message->message = $message;
+        $createMessage->dialog_id = $this->id;
+        $createMessage->user_id = $userId;
+        $createMessage->message = $message;
 
         if($userId === $this->owner_id){
             $this->user_new_messages++;

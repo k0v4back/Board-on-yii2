@@ -64,6 +64,8 @@ return [
                 'show/<id:\d+>' => 'advert/advert/show',
                 'photo/<id:\d+>' => 'advert/advert/add-photo',
 
+                'dialog/<id:\d+>' => 'dialog/dialog/dialog',
+
             ],
         ],
     ],

@@ -25,7 +25,7 @@ class DialogService
     public function createMessage($id, MessagesForm $form)
     {
         $message = $this->dialogRepository->get($id);
-        $message->writeMessage($form->user_id, $form->message);
+        $message->writeMessage(\Yii::$app->user->getId(), $form->message);
 
     }
 }

@@ -21,14 +21,19 @@ class DialogController extends Controller
 
     public function actionDialog($id)
     {
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['/user/login/login']);
+        }
+
         $form = new MessagesForm();
         $form->dialog_id = $id;
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
                 $this->dialogService->createMessage($id, $form);
+                return $this->refresh();
             } catch (\Exception $e) {
-                Yii::$app->session->setFlash('danger', 'Ошибка! Сообщение не отправлено!');
+                Yii::$app->session->setFlash('danger', 'Ошибка! Сообщение не отправлено!'. $e);
             }
         }
 
