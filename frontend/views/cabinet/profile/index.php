@@ -3,8 +3,7 @@
 use dosamigos\fileupload\FileUpload;
 use yii\helpers\Url;
 
-
-//var_dump(\board\entities\Advert::getFavorites());die();
+//var_dump($dialogs);die();
 ?>
 
 
@@ -74,6 +73,9 @@ use yii\helpers\Url;
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
             Избранные
         </button><br><br>
+        <button type="button" class="btn btn-dafault" data-toggle="modal" data-target="#myModal2">
+            Диалоги
+        </button><br><br>
         <a href="<?= Url::to(['/cabinet/ticket/index', 'user_id' => $model->id]) ?>" class="btn btn-danger">
             Обратиться в службу поддержки
         </a>
@@ -99,6 +101,33 @@ use yii\helpers\Url;
 
                             </text>
                         </div><br>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Диалоги ()</h4>
+                    </div>
+                    <div class="modal-body">
+                        <?php foreach ($dialogs as $dialog) : ?>
+                            <?php
+                                $user = \board\entities\User::find()->where(['id' => $dialog['owner_id']])->limit(1)->one();
+                            ?>
+                            <div style="border: 1px solid black; border-radius: 5px; padding: 10px">
+                                <text style="font-size: 17px"><a href="<?= Url::to(['dialog/dialog/dialog', 'id' => $dialog['id']]) ?>"><?= $user->username ?></a>
+                                    </a><br>
+                                    <a href="<?= Url::to(['dialog/dialog/dialog', 'id' => $dialog['id']]) ?>" class="btn btn-default">Смотреть подробнее</a>
+
+                                </text>
+                            </div><br>
                         <?php endforeach; ?>
                     </div>
                     <div class="modal-footer">

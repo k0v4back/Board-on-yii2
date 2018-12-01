@@ -4,6 +4,7 @@ namespace frontend\controllers\cabinet;
 
 use board\entities\Advert;
 use board\entities\Avatar;
+use board\entities\dialog\Dialog;
 use board\entities\Photo;
 use board\entities\User;
 use board\forms\profile\EditNameForm;
@@ -46,6 +47,8 @@ class ProfileController extends Controller
 
         $favorites = Advert::getFavorites();
 
+        $dialogs = Dialog::find()->where(['client_id' => $id])->all();
+
 
         if ($picture = Avatar::find()->where(['user_id' => $id])->one()) {
             $data = Yii::$app->storage->getFile($picture->name);
@@ -63,6 +66,7 @@ class ProfileController extends Controller
             'adverts' => $advert,
             'advertClosed' => $advertClosed,
             'favorites' => $favorites,
+            'dialogs' => $dialogs,
         ]);
     }
 
