@@ -1,6 +1,2 @@
 <?php
-return [
-    3 => [
-        'admin',
-    ],
-];
+return [];

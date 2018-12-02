@@ -34,7 +34,7 @@ return [
             ],
         ],
         'authManager' => [
-            'class' => 'yii\rbac\PhpManager',
+            'class' => 'console\manager\AuthManager',
             'itemFile' => '@common/rbac/items.php',
             'assignmentFile' => '@common/rbac/assignments.php',
             'ruleFile' => '@common/rbac/rules.php',

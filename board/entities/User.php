@@ -27,6 +27,7 @@ use yii\web\IdentityInterface;
  * @property string $phone_verified_token
  * @property string $phone_verified_token_expire
  * @property string $code
+ * @property string $role
  * @property string $password write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
