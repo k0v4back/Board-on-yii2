@@ -69,7 +69,7 @@ return [
         'rules' => [
             [
                 'allow' => true,
-                'roles' => ['@'],
+                'roles' => [\backend\rbac\Rbac::PERMISSION_ADMIN_PANEL],
             ],
         ],
     ],

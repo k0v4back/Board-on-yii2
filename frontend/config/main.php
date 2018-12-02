@@ -27,6 +27,7 @@ return [
             'identityClass' => 'board\entities\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity', 'httpOnly' => true, 'domain' => $params['cookieDomain']],
+            'loginUrl' => ['user/login/login/'],
         ],
         'session' => [
             'name' => '_session',
