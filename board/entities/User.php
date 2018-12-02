@@ -38,7 +38,7 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_SUCCESS_PHONE_VERIFIED = 1;
     const EMPTY_CODE = null;
 
-    public static function signup($username, $email, $password)
+    public static function signup($username, $email, $password, $role)
     {
         $user = new static();
         $user->username = $username;
@@ -48,6 +48,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user->status = self::STATUS_WAIT;
         $user->generateEmailConfirmToken();
         $user->generateAuthKey();
+        $user->role = $role;
         return $user;
     }
 

@@ -19,7 +19,7 @@ class SignupController extends Controller
 
     public function actionSignup()
     {
-        $form = new SignupForm();
+        $form = new SignupForm(Yii::$app->params['defaultRole']);
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
                 $this->signupService->signup($form);

@@ -20,7 +20,8 @@ class SignupService
         $user = User::signup(
             $form->username,
             $form->email,
-            $form->password
+            $form->password,
+            $form->role
         );
 
         if (!$user->save()) {
