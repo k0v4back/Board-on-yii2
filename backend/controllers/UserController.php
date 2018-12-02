@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use board\forms\creative\User\UserCreateForm;
+use board\forms\creative\User\UserEditForm;
 use board\services\creative\UserManageService;
 use Yii;
 use board\entities\User;
@@ -101,12 +102,26 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $form = new UserEditForm($model);
+
+        if($form->load(Yii::$app->request->post()) && $form->validate()){
+            try{
+                $this->service->edit($id, $form);
+                Yii::$app->session->setFlash('success', 'Пользователь успешно обновлён');
+                return $this->redirect(['view', 'id' => $model->id]);
+            } catch (\DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
 
+//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//            return $this->redirect(['view', 'id' => $model->id]);
+//        }
+//
         return $this->render('update', [
-            'model' => $model,
+            'model' => $form,
+            'user' => $model,
         ]);
     }
 

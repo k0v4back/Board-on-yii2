@@ -39,6 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Почта',
             ],
             [
+                'label' => 'Роль',
+                'class' => \board\helpers\HelperRole::class,
+                'filter' => \yii\helpers\ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'description'),
+                'attribute' => 'role',
+            ],
+            [
                 'attribute' => 'status',
                 'label' => 'Статус',
                 'filter' => \board\helpers\UserHelper::statusList(),

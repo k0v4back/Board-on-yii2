@@ -52,10 +52,12 @@ class User extends ActiveRecord implements IdentityInterface
         return $user;
     }
 
-    public function edit(string $username, string $email): void
+    public function edit(string $username, string $email, $status, $role): void
     {
         $this->username = $username;
         $this->email = $email;
+        $this->status = $status;
+        $this->role = $role;
         $this->updated_at = time();
     }
 

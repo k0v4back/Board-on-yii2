@@ -1,6 +1,6 @@
 <?php
 
-namespace board\services\creative\User;
+namespace board\forms\creative\User;
 
 use board\entities\User;
 use yii\base\Model;
@@ -9,12 +9,16 @@ class UserEditForm extends Model
 {
     public $username;
     public $email;
+    public $role;
+    public $status;
     public $_user;
 
     public function __construct(User $user, $config = [])
     {
         $this->username = $user->username;
         $this->email = $user->email;
+        $this->status = $user->status;
+        $this->role = $user->role;
         $this->_user = $user;
         parent::__construct($config);
     }
@@ -22,7 +26,7 @@ class UserEditForm extends Model
     public function rules(): array
     {
         return [
-            [['username', 'email'], 'required'],
+            [['username', 'email', 'role', 'status'], 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
             [['username', 'email'], 'unique', 'targetClass' => User::class, 'filter' => ['<>', 'id', $this->_user->id]],

@@ -5,7 +5,7 @@ namespace board\services\creative;
 use board\entities\User;
 use board\forms\creative\User\UserCreateForm;
 use board\repositories\UserRepository;
-use board\services\creative\User\UserEditForm;
+use board\forms\creative\User\UserEditForm;
 
 class UserManageService
 {
@@ -32,7 +32,9 @@ class UserManageService
         $user = $this->repository->get($id);
         $user->edit(
             $form->username,
-            $form->email
+            $form->email,
+            $form->status,
+            $form->role
         );
         $this->repository->save($user);
     }
