@@ -17,6 +17,7 @@ class UserSearch extends Model
     public $username;
     public $email;
     public $status;
+    public $role;
 
     public function rules()
     {
@@ -24,6 +25,7 @@ class UserSearch extends Model
             [['id', 'status'], 'integer'],
             [['username', 'email'], 'safe'],
             [['date_from', 'date_to'], 'date', 'format' => 'php:Y-m-d'],
+            ['role', 'string', 'max' => 64],
         ];
     }
 
@@ -47,6 +49,7 @@ class UserSearch extends Model
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
+            'role' => $this->role,
         ]);
 
         $query

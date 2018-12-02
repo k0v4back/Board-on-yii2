@@ -69,6 +69,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw',
                     ],
+                    [
+                        'label' => 'Роли',
+                        'class' => \board\helpers\HelperRole::class,
+                        'filter' => \yii\helpers\ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'description'),
+                        'attribute' => 'role',
+                    ],
 
                     ['class' => 'yii\grid\ActionColumn'],
                 ],
